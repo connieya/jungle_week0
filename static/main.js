@@ -16,35 +16,52 @@
 //     success: function (response) {},
 //   });
 // }
-
- function signup() {
-        let id = $("#signup__id").val();
-        let name = $("#signup__name").val();
-        let password = $("#signup__password").val();
-        let password_re = $("#signup__password--re").val();
-        if(password != password_re) {
-          alert("비밀번호가 일치 하지 않습니다. ");
-          return
-        }
-        console.log(id,name ,password , password_re);
-
-        $.ajax({
-          type: "POST",
-          url: "/signUp",
-          data: { user_id: id, user_name: name, user_pw: password },
-          success: function (response) {
-            if (response["result"] == "success") {
-              alert("회원가입 성공!");
-              window.location.href = "/";
-            } else {
-              alert("회원가입 실패");
-              window.location.reload();
-            }
-          },
-        });
+function login() {
+  let login_id = $("#login__id").val();
+  let login_pw = $("#login__password").val();
+  console.log(login_id ,login_pw)
+  $.ajax({
+    type: "POST",
+    url: "/login",
+    data: { 'login_id' : login_id, 'login_pw': login_pw },
+    success: function (response) {
+      console.log("~~~~~~~##".response)
+      if (response["result"] == "success") {
+        alert("로그인 성공!");
+        window.location.href = "/";
+      } else {
+        alert("로그인 실패! 아이디와 비밀번호 확인하세요");
       }
+    },
+  });
+}
 
+function signup() {
+  let id = $("#signup__id").val();
+  let name = $("#signup__name").val();
+  let password = $("#signup__password").val();
+  let password_re = $("#signup__password--re").val();
+  if (password != password_re) {
+    alert("비밀번호가 일치 하지 않습니다. ");
+    return;
+  }
+  console.log(id, name, password, password_re);
 
+  $.ajax({
+    type: "POST",
+    url: "/signUp",
+    data: { user_id: id, user_name: name, user_pw: password },
+    success: function (response) {
+      if (response["result"] == "success") {
+        alert("회원가입 성공!");
+        window.location.href = "/";
+      } else {
+        alert("회원가입 실패");
+        window.location.reload();
+      }
+    },
+  });
+}
 
 function makeCard() {}
 
