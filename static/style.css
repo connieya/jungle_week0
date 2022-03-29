@@ -1,0 +1,77 @@
+/* Global */
+:root {
+  /* color */
+
+  /* font size */
+
+  /* font weight */
+
+  /* size */
+
+  /* animation */
+}
+
+/* Universal Tags */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+i {
+  font-size: x-large;
+}
+
+/* Typography */
+
+/* Header */
+
+header {
+  position: fixed;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 20px 0 50px 0;
+  z-index: 1;
+  background-color: white;
+}
+
+/* Section */
+section {
+  padding-top: 120px;
+}
+
+.article__container {
+    display: flex;
+    flex-direction: column;
+}
+
+.article__button--sort {
+  display: flex;
+  align-items: center;
+}
+
+.article__card--container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.card {
+  width: 300px;
+  margin: 20px;
+}
+
+.card-content > .content__name {
+  text-align: center;
+}
+
+span {
+  margin-bottom: 3px;
+}
+
+/* Footer */
