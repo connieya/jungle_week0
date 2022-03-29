@@ -1,21 +1,21 @@
 "use strict";
 
 // Sign Up
-function signup() {
-  const signupName = document.querySelector("#signup__name");
-  const signupId = document.querySelector("#signup__id");
-  const signupPassword = document.querySelector("#signup__password");
-  const signupPasswordRe = document.querySelector("#signup__password--re");
+// function signup() {
+//   const signupName = document.querySelector("#signup__name");
+//   const signupId = document.querySelector("#signup__id");
+//   const signupPassword = document.querySelector("#signup__password");
+//   const signupPasswordRe = document.querySelector("#signup__password--re");
 
-  console.log(signupName.value);
+//   console.log(signupName.value);
 
-  $.ajax({
-    type: "POST",
-    url: "",
-    data: {},
-    success: function (response) {},
-  });
-}
+//   $.ajax({
+//     type: "POST",
+//     url: "",
+//     data: {},
+//     success: function (response) {},
+//   });
+// }
 
 function makeCard() {}
 
