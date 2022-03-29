@@ -28,8 +28,7 @@
       src="https://code.jquery.com/jquery-3.5.1.min.js"
       crossorigin="anonymous"
     ></script>
-    <script>
-    </script>
+    <script></script>
   </head>
   <body>
     <!-- Header -->
@@ -40,6 +39,14 @@
       <div class="header__title">
         <h1 class="title is-2">유대의 민족</h1>
       </div>
+      {% if login == True %} {{session['user_name']}} 님 반가워요!
+      <div class="header__auth">
+        <!-- <button class="button is-light">로그인</button> -->
+        <button class="button is-light" onclick="logout()">로그아웃</button>
+        <!-- <button class="button is-info">회원가입</button> -->
+        <button class="button is-info js-modal-trigger2">내프로필</button>
+      </div>
+      {% else %}
       <div class="header__auth">
         <!-- <button class="button is-light">로그인</button> -->
         <button
@@ -56,20 +63,8 @@
           회원가입
         </button>
       </div>
-         <div class="header__auth">
-        <!-- <button class="button is-light">로그인</button> -->
-        <button
-          class="button is-light js-modal-trigger1"
-        >
-          로그아웃
-        </button>
-        <!-- <button class="button is-info">회원가입</button> -->
-        <button
-          class="button is-info js-modal-trigger2"
-        >
-          내프로필
-        </button>
-      </div>
+
+      {% endif %}
     </header>
 
     <!-- Section -->
@@ -192,7 +187,12 @@
               <button class="button signup__complete" onclick="login()">
                 로그인
               </button>
-              <button class="button signup__cancel" onclick="location.href= '/'">취소</button>
+              <button
+                class="button signup__cancel"
+                onclick="location.href= '/'"
+              >
+                취소
+              </button>
             </div>
           </div>
         </div>
@@ -207,7 +207,8 @@
           <div class="box">
             <p>회원가입</p>
             <!-- Your content -->
-            <div> <!--  form 태그 대신 div 태그 -->
+            <div>
+              <!--  form 태그 대신 div 태그 -->
               <label for="signup__name">이름을 입력하세요.</label>
               <br />
               <input
@@ -247,8 +248,14 @@
               <button class="button signup__complete" onclick="signup()">
                 회원가입
               </button>
-              <button class="button signup__cancel" onclick="location.href= '/'">취소</button>
-            </div> <!-- form 태그 대신 div 태그 -->
+              <button
+                class="button signup__cancel"
+                onclick="location.href= '/'"
+              >
+                취소
+              </button>
+            </div>
+            <!-- form 태그 대신 div 태그 -->
           </div>
         </div>
 

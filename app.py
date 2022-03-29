@@ -6,9 +6,20 @@ import jwt
 app = Flask(__name__)
 client = MongoClient('localhost',27017)
 db = client.week1
+
+
 @app.route('/')
 def main():
-   return render_template('main.html')
+   user_list = list(db.user.find({}))
+   if session['logged_in'] == True :
+      user_id = session['user_id']
+      return render_template('main.html', session_id = user_id , login = True , users = user_list)
+
+
+   return render_template('main.html' , login = False , users = user_list)
+
+
+
 
 @app.route('/signUp',methods = ['POST'])
 def add_user():
@@ -20,6 +31,8 @@ def add_user():
    db.user.insert_one(new_user)
    return jsonify({'result' : 'success'})
 
+
+
 @app.route('/login' , methods=['POST'])
 def login() :
    login_id = request.form['login_id']
@@ -28,7 +41,7 @@ def login() :
    if user :
       password = jwt.decode(user['password'] ,'abcde' , algorithms=['HS256'])['password'] 
       if login_pw == password :
-         session['loggied_in'] = True
+         session['logged_in'] = True
          # cname = db.user.find_one({'user_id' , login_id})
          # session['membername'] = cname['username']
          session['user_id'] = user['user_id']
@@ -36,6 +49,13 @@ def login() :
          return jsonify({'result' : 'success'})
 
    return jsonify({'result' :'fail'})
+
+
+@app.route('/logout' , methods =['GET'])
+def logout():
+   session['logged_in'] = False
+   print("로그아웃~~")
+   return jsonify({'result' : 'success'})
 
 if __name__ == '__main__':
    app.secret_key = "123"
