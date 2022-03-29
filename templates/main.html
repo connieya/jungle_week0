@@ -28,72 +28,8 @@
       src="https://code.jquery.com/jquery-3.5.1.min.js"
       crossorigin="anonymous"
     ></script>
-
     <script>
-
-        function signup() {
-            const username = $("#signup__name").val();
-            const id = $("#signup__id").val();
-            const password = $("#signup__password").val();
-            
-            $.ajax({
-                type: "POST",
-                url: "/register",
-                data: {'name_give': username, 'id_give': id, 'password_give': password},
-                success: function (response) {
-                    //  if (response["result"] == "overlap") {
-                    //     alert("아이디 중복!")
-                    //     window.location.reload();
-                    // }
-                    // else 
-                    if(response["result"] == "success"){
-                        alert("회원가입 성공!");
-                        window.location.href = '/';
-                    }
-                    else{
-                        alert("회원가입 실패")
-                        window.location.reload();
-                    }
-                }
-            })
-
-        }
-    
-        function login() {
-            const id = $("#login__id").val();
-            const password = $("#login__password").val();
-            $.ajax({
-                type: "POST",
-                url: "/login",
-                data: { 'id_give': id, 'password_give': password},
-                success: function (response) {
-                    if (response["result"] == "success") {
-                        alert("로그인 성공!");
-                        window.location.href = '/';
-                    } else {
-                        alert("로그인 실패! 아이디와 비밀번호 확인하세요")
-                    }
-                }
-            })
-        }
-
-        function logout(){
-            $.ajax({
-                type: "GET",
-                url: "/logout",
-                data: {},
-                success: function (response) {
-                    if (response["result"] == "success") {
-                        alert("로그아웃 성공!");
-                        window.location.href = '/';
-                    }
-                }
-            })
-        }
-    
     </script>
-
-
   </head>
   <body>
     <!-- Header -->
@@ -118,6 +54,20 @@
           data-target="modal-js-example--signup"
         >
           회원가입
+        </button>
+      </div>
+         <div class="header__auth">
+        <!-- <button class="button is-light">로그인</button> -->
+        <button
+          class="button is-light js-modal-trigger1"
+        >
+          로그아웃
+        </button>
+        <!-- <button class="button is-info">회원가입</button> -->
+        <button
+          class="button is-info js-modal-trigger2"
+        >
+          내프로필
         </button>
       </div>
     </header>
@@ -238,7 +188,7 @@
                 id="login__password"
                 name="login_password"
               />
-              <br>
+              <br />
               <button class="button signup__complete" onclick="login()">
                 로그인
               </button>
@@ -257,7 +207,7 @@
           <div class="box">
             <p>회원가입</p>
             <!-- Your content -->
-            <div>
+            <div> <!--  form 태그 대신 div 태그 -->
               <label for="signup__name">이름을 입력하세요.</label>
               <br />
               <input
@@ -293,12 +243,12 @@
                 id="signup__password--re"
                 name="signup__password--re"
               />
-              <br>
+              <br />
               <button class="button signup__complete" onclick="signup()">
                 회원가입
               </button>
               <button class="button signup__cancel" onclick="">취소</button>
-            </div>
+            </div> <!-- form 태그 대신 div 태그 -->
           </div>
         </div>
 

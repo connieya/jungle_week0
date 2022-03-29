@@ -55,13 +55,13 @@ def login():
       # 나중에 try, catch로 구현할 생각 jwt.decode("JWT_STRING", "secret", algorithms=["HS256"])
       if password == db_password:
          session['logged_in'] = True
-         #dbsample 디비에서 유저아이디로 찾은 유저 네임을 /home에서 뿌려줄꺼임
+         #dbsample 디비에서 유저아이디로 찾은 유저 네임을 /home에서 뿌려줄꺼
          cname = db.dbsample.find_one({'userid':userid})
          session['membername'] = cname['username']
 
          #pk_key 값도 안보이지만 넘겨줄거에요
-         #pk_key = ObjectId(cname['_id'])
-         #session['member_pk'] = pk_key
+        #  pk_key = ObjectId(cname['_id'])
+        #  session['member_pk'] = pk_key
          #최신 등록순으로 뿌려주기 위해
          #session['sort_order'] = 'time'
          return jsonify({'result': 'success'})
