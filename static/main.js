@@ -1,21 +1,50 @@
 "use strict";
 
 // Sign Up
-function signup() {
-  const signupName = document.querySelector("#signup__name");
-  const signupId = document.querySelector("#signup__id");
-  const signupPassword = document.querySelector("#signup__password");
-  const signupPasswordRe = document.querySelector("#signup__password--re");
+// function signup() {
+//   const signupName = document.querySelector("#signup__name");
+//   const signupId = document.querySelector("#signup__id");
+//   const signupPassword = document.querySelector("#signup__password");
+//   const signupPasswordRe = document.querySelector("#signup__password--re");
 
-  console.log(signupName.value);
+//   console.log(signupName.value);
 
-  $.ajax({
-    type: "POST",
-    url: "",
-    data: {},
-    success: function (response) {},
-  });
-}
+//   $.ajax({
+//     type: "POST",
+//     url: "",
+//     data: {},
+//     success: function (response) {},
+//   });
+// }
+
+ function signup() {
+        let id = $("#signup__id").val();
+        let name = $("#signup__name").val();
+        let password = $("#signup__password").val();
+        let password_re = $("#signup__password--re").val();
+        if(password != password_re) {
+          alert("비밀번호가 일치 하지 않습니다. ");
+          return
+        }
+        console.log(id,name ,password , password_re);
+
+        $.ajax({
+          type: "POST",
+          url: "/signUp",
+          data: { user_id: id, user_name: name, user_pw: password },
+          success: function (response) {
+            if (response["result"] == "success") {
+              alert("회원가입 성공!");
+              window.location.href = "/";
+            } else {
+              alert("회원가입 실패");
+              window.location.reload();
+            }
+          },
+        });
+      }
+
+
 
 function makeCard() {}
 
@@ -41,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ($trigger) => {
       const modal = $trigger.dataset.target;
       const $target = document.getElementById(modal);
-      console.log($target);
+      // console.log($target);
 
       $trigger.addEventListener("click", () => {
         openModal($target);
@@ -53,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ($trigger) => {
       const modal = $trigger.dataset.target;
       const $target = document.getElementById(modal);
-      console.log($target);
+      // console.log($target);
 
       $trigger.addEventListener("click", () => {
         openModal($target);
