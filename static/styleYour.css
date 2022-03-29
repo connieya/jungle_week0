@@ -1,0 +1,73 @@
+/* Global */
+:root {
+  /* color */
+
+  /* font size */
+
+  /* font weight */
+
+  /* size */
+
+  /* animation */
+}
+
+/* Universal Tags */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+i {
+  font-size: x-large;
+}
+
+/* yourprofile.html */
+header {
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+}
+
+.wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+}
+
+.card {
+  width: 600px;
+}
+
+.card__container {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-name {
+    text-align: center;
+}
+
+.card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.list__content {
+  margin: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card__input {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 50px 0 20px 0;
+}
