@@ -25,6 +25,7 @@ i {
   font-size: x-large;
 }
 
+/* main.html */
 /* Typography */
 
 /* Header */
@@ -53,6 +54,7 @@ section {
 .article__button--sort {
   display: flex;
   align-items: center;
+  margin: auto;
 }
 
 .article__card--container {
@@ -75,3 +77,4 @@ span {
 }
 
 /* Footer */
+

@@ -10,7 +10,6 @@ db = client.week1
 def main():
    return render_template('main.html')
 
-
 @app.route('/signUp',methods = ['POST'])
 def add_user():
    before_password = request.form['user_pw']
@@ -19,7 +18,7 @@ def add_user():
    user_id = request.form['user_id']
    new_user = {'user_id' : user_id , 'name' : user_name , 'password' : after_password}
    db.user.insert_one(new_user)
-   return jsonify({'result' : 'success'}) 
+   return jsonify({'result' : 'success'})
 
 @app.route('/login' , methods=['POST'])
 def login() :
@@ -36,7 +35,7 @@ def login() :
          session['user_name'] = user['name']
          return jsonify({'result' : 'success'})
 
-   return jsonify({'result' :'fail'})     
+   return jsonify({'result' :'fail'})
 
 if __name__ == '__main__':
    app.secret_key = "123"
