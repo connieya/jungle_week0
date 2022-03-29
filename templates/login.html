@@ -1,0 +1,106 @@
+<!Doctype html>
+<html lang="ko">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css"/>
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <style>
+  
+    </style>
+
+    <title>login</title>
+    
+    <script>
+        function login() {
+            const id = $("#id").val();
+            const password = $("#password").val();
+            $.ajax({
+                type: "POST",
+                url: "/login",
+                data: { 'id_give': id, 'password_give': password},
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        alert("로그인 성공!");
+                        window.location.href = '/';
+                    } else {
+                        alert("로그인 실패! 아이디와 비밀번호 확인하세요")
+                    }
+                }
+            })
+        }
+
+        function logout(){
+            $.ajax({
+                type: "GET",
+                url: "/logout",
+                data: {},
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        alert("로그아웃 성공!");
+                        window.location.href = '/';
+                    }
+                }
+            })
+        }
+    </script>
+</head>
+
+<body>
+    <div class="box">
+    <div class="log-box has-background-white">
+            <!-- <div>
+                {{now_name+"님 반가워요"}}
+            </div> -->
+          <div class="field">
+              <label id="title" class="label">로그인</label>
+              <div class="control has-icons-left has-icons-right">
+              <input class="input" id="id" type="username" name="username" placeholder="Userid">
+              <span class="icon is-small is-left">
+                  <i class="fas fa-user"></i>
+              </span>
+              </div>
+          </div>
+          <div class="field">
+            <p class="control has-icons-left">
+              <input class="input" id="password" type="password" name="password" placeholder="Password">
+              <span class="icon is-small is-left">
+                <i class="fas fa-lock"></i>
+              </span>
+            </p>
+          </div>
+
+          <div class="field">
+              <p class="control">
+                <button onclick="login()" class="button is-link">
+              <!-- <button type="submit" class="button is-link"> -->
+                  Login
+              </button>
+              <button onclick="logout()" class="button is-link">
+                    로그아웃
+              </button>
+              <button type="button" onclick="location.href='/regi'" class="button is-success is-pulled-right">
+                등록
+              </button>
+        
+              </p>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+</body>
+
+</html>

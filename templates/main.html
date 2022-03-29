@@ -1,12 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+      <!-- Required meta tags -->
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <!-- bulma -->
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+      <!-- JS -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+          integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+          crossorigin="anonymous"></script>
+  
+      <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+
+      <title>home</title>
+
+    <script>
+        function register() {
+        const username = $("#name").val();
+        const id = $("#id").val();
+        const password = $("#password").val();
+        
+        $.ajax({
+            type: "POST",
+            url: "/register",
+            data: {'name_give': username, 'id_give': id, 'password_give': password},
+            success: function (response) {
+                //  if (response["result"] == "overlap") {
+                //     alert("아이디 중복!")
+                //     window.location.reload();
+                // }
+                // else 
+                if(response["result"] == "success"){
+                    alert("회원가입 성공!");
+                    window.location.href = '/';
+                }
+                else{
+                    alert("회원가입 실패")
+                    window.location.reload();
+                }
+            }
+        })
+
+    }
+    </script>
+
 </head>
 <body>
-    
+    <div class="primary">
+        <div class="field">
+            <label class="label" id="title">회원가입</label>
+            <label class="label">Username</label>
+            <div class="control has-icons-left has-icons-right">
+            <input class="input" id="name" type="" name="username" placeholder="Username">
+            <span class="icon is-small is-left">
+                <i class="fas fa-user"></i>
+            </span>
+            </div>
+        </div>
+        <div class="field">
+            <label class="label">Id</label>
+            <p class="control has-icons-left">
+            <input class="input" id="id" type="" name="id" placeholder="Id">
+            <span class="icon is-small is-left">
+              <i class="fas fa-lock"></i>
+            </span>
+          </p>
+        </div>
+        <div class="field">
+            <label class="label">Password</label>
+            <p class="control has-icons-left"> 
+            <input class="input" id="password" type="password" name="password" placeholder="Password">
+            <span class="icon is-small is-left">
+              <i class="fas fa-lock"></i>
+            </span>
+          </p>
+        </div>
+
+        <div class="field">
+            <p class="control">
+              <button onclick="register()" class="button is-warning is-light">
+            <!-- <button type="submit" class="button is-link"> -->
+                회원가입
+            </button>
+            </p>
+        </div>
+    </div>
 </body>
 </html>
