@@ -1,7 +1,7 @@
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
 from pymongo import MongoClient
 from bson import ObjectId
-import jwt
+import jwt,json
 
 app = Flask(__name__)
 client = MongoClient('localhost',27017)
@@ -11,7 +11,7 @@ db = client.week1
 @app.route('/')
 def main():
    user_list = list(db.user.find({}))
-   if session['logged_in'] == True :
+   if "user_id" in session :
       user_id = session['user_id']
       return render_template('main.html', session_id = user_id , login = True , users = user_list)
 
@@ -42,9 +42,7 @@ def login() :
       password = jwt.decode(user['password'] ,'abcde' , algorithms=['HS256'])['password'] 
       if login_pw == password :
          session['logged_in'] = True
-         # cname = db.user.find_one({'user_id' , login_id})
-         # session['membername'] = cname['username']
-         session['user_id'] = user['user_id']
+         session['user_id'] = login_id
          session['user_name'] = user['name']
          return jsonify({'result' : 'success'})
 
@@ -53,9 +51,28 @@ def login() :
 
 @app.route('/logout' , methods =['GET'])
 def logout():
-   session['logged_in'] = False
-   print("로그아웃~~")
+   session.pop('user_id')
+   # session['logged_in'] = False
    return jsonify({'result' : 'success'})
+
+@app.route('/myprofile' , methods = ['GET' , 'POST'])
+def myprofile():
+   user_id =request.args.get('user_id')
+   print("@@#!!@#!@#@!" ,user_id)
+   common_content = list(db.common.find({'user_id' : user_id}))
+   print("sdadasd",common_content)
+   return render_template('myprofile.html' , user_id = user_id)   
+
+
+@app.route('/yourProfile/<user_id>')
+def you(user_id):
+   user_info = db.user.find_one({'user_id' : user_id })
+   print("user_info" ,type(user_info))
+   print("user_info @@@@" ,user_info['user_id'])
+   print("user_info @@@@" ,user_info['name'])
+   
+   common_content = list(db.common.find({'user_id' : user_info['user_id']}))
+   return render_template('yourprofile.html' , common_content = common_content , user_name = user_info['name'])
 
 if __name__ == '__main__':
    app.secret_key = "123"

@@ -59,6 +59,19 @@ function signup() {
   });
 }
 
+function myprofile(user_id){
+  console.log("sdsad",user_id)
+   $.ajax({
+     type: "GET",
+     url: "/myprofile",
+     data: { user_id: user_id},
+     success: function (response) {
+       console.log("response =>" , response)
+       window.location.href = '/myprofile'
+     },
+   });
+}
+
 function makeCard() {}
 
 // Modal
