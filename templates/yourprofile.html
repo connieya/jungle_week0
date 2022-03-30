@@ -20,24 +20,7 @@
       crossorigin="anonymous"
     ></script>
     <script>
-      let total = 0;
-      $(document).ready(function () {
-        
-        // showSympathyPeople();
-      });
-
-      // function showSympathyPeople() {
-      //  common_pk = $('#common_hidden').text();
-      //  console.log("pk~~~",common_pk)
-      //   $.ajax({
-      //     type : "GET",
-      //     url : "/showSympathy",
-      //     data : {},
-
-      //   })
-      //   $("#sympathy_data").append();
-
-      // }
+      // let total = 0;
       function callSympathyData(common_pk) {
         $.ajax({
           type: "POST",
@@ -50,8 +33,8 @@
               console.log(person);
               $(`#${common_pk}_2`).append(person + " ");
             }
-            total += datas.length
-            $('.common__count').html(total) 
+            // total += datas.length
+            // $('.common__count').html(total) 
           },
         });
       }
@@ -116,7 +99,7 @@
             <div class="card__header">
               <div class="card__text">
                 <span class="common__text">공감 : </span>
-                <span class="common__count"></span>
+                <span class="common__count">{{count}}</span>
               </div>
             </div>
             <div class="list">

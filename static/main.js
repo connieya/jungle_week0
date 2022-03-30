@@ -18,6 +18,7 @@ function logout() {
   window.location.href = "/";
 }
 
+
 function login() {
   let login_id = $("#login__id").val();
   let login_pw = $("#login__password").val();

@@ -110,8 +110,9 @@ def myProfile(user_id):
 @app.route('/yourProfile/<user_id>')
 def yourProfile(user_id):
    user_info = db.user.find_one({'user_id' : user_id })
+   sympathyList = list(db.sympathy.find({'user_id' :user_info['user_id']}))
    common_content = list(db.info.find({'user_id' : user_info['user_id']}))
-   return render_template('yourprofile.html' , common_content = common_content , user_name = user_info['name'] , user_id = user_info['user_id'])
+   return render_template('yourprofile.html' , common_content = common_content , user_name = user_info['name'] , user_id = user_info['user_id'], count = len(sympathyList))
 
 
 @app.route('/deleteInfo', methods=['POST'])
@@ -161,6 +162,14 @@ def callSympathy() :
    sympathy_people = list(db.sympathy.find({'id' : info_pk },{'_id':False}))
    return jsonify({'data' : sympathy_people})
 
+
+@app.route('/callSympathyCount' , methods=['POST'])
+def callSympathyCount() :
+   user_id = request.form['user_id']
+   sympathy_people = list(db.sympathy.find({'user_id' : user_id },{'_id':False}))
+   print("flask 서버 확인 !!!", sympathy_people)
+   print("flask 서버 확인 !!222!", len(sympathy_people))
+   return jsonify({'data' : sympathy_people})
 
 
 if __name__ == '__main__':

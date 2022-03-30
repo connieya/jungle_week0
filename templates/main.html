@@ -5,6 +5,19 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="/static/style.css" />
+    <script>
+      
+function callSympathyCount(user_id){
+  $.ajax({
+    type: "POST",
+    url: "/callSympathyCount",
+    data: { user_id: user_id },
+    success: function (response) {
+      $(`#${user_id}`).append(response.data.length)
+    },
+  });
+}
+    </script>
   </head>
   <body>
     <!-- Header -->
@@ -65,8 +78,12 @@
                   />
                 </figure>
               </div>
+              <script type="text/javascript">
+                callSympathyCount("{{user.user_id}}")
+              </script>
               <div class="card-content">
                 <a class="content__name" href={{ url_for('yourProfile',  user_id = user.user_id )}}>{{user.name}}</a>
+              <p id="{{user.user_id}}">공감 : </p>
               </div>
             </div>
             {% endfor %}
