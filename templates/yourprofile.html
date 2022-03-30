@@ -58,17 +58,17 @@
       function clickSympathy(common_id) {
         info = $(`.${common_id}`).text();
         user_id = $(`#${common_id}`).text();
-        person = $("#hidden_id").text();
-        session_id = $("#hidden_id2").text();
+        sympathy_person = $("#hidden_id").text(); // 공감 버튼을 누르는 사람 이름(로그인)
+        session_id = $("#hidden_id2").text(); // 공감 버튼을 누르는 사람 아이디(로그인)
         if (user_id == session_id) {
           alert("본인 글에는 공감 할 수 없습니다. 미안~");
           return;
         }
-        console.log(info, user_id, person);
+        console.log(info, user_id, sympathy_person);
         $.ajax({
           type: "POST",
           url: "/sympathy",
-          data: { user_id: user_id, person: person, info: info, pk: common_id },
+          data: { user_id: user_id, sympathy_id : session_id, sympathy_person: sympathy_person, info: info, pk: common_id },
           success: function (response) {
             if (response["result"] == "success") {
               window.location.reload();

@@ -1,26 +1,41 @@
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
 from pymongo import MongoClient
 from bson import ObjectId
-import jwt,json
+import jwt, json, hashlib
+import datetime as dt
 
 app = Flask(__name__)
 client = MongoClient('localhost',27017)
 db = client.week1
 
+SECRET_KEY = 'threeeeee'
+
+# @app.route('/home')
+# def home():
+#    return render_template('main.html')
 
 @app.route('/')
 def main():
+
+   token_receive = request.cookies.get('token')
+   
    user_list = list(db.user.find({}))
-   if "user_id" in session :
-      user_id = session['user_id']
-      return render_template('main.html', session_id = user_id , login = True , users = user_list)
+   try:
+      payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+      print("try")
+      if "user_id" in session :
+         user_id = session['user_id']
+         return render_template('main.html', session_id = user_id , login = True , users = user_list)
 
-
-   return render_template('main.html' , login = False , users = user_list)
+   except jwt.ExpiredSignatureError:
+      print("except")
+      return render_template('main.html' , login = False , users = user_list)
+   except jwt.exceptions.DecodeError:
+      print("except")
+      return render_template('main.html' , login = False , users = user_list)
 
 @app.route('/idOverlap', methods=['POST'])
 def same_id():
-
    if list(db.user.find({'user_id' :request.form['log_id']})):
       print("aaaaaa")
       return jsonify({'result': 'overlap'})
@@ -34,7 +49,10 @@ def add_user():
    after_password = jwt.encode({'password' : before_password} , 'abcde' , algorithm = 'HS256')
    user_name  = request.form['user_name']
    user_id = request.form['user_id']
-   new_user = {'user_id' : user_id , 'name' : user_name , 'password' : after_password}
+   d = dt.datetime.now()
+   t = str(d.year) + str(d.month) + str(d.day) + str(d.hour) + str(d.minute) + str(d.second)
+   timenow = int(t)
+   new_user = {'user_id' : user_id , 'name' : user_name , 'password' : after_password, 'time' : timenow}
    db.user.insert_one(new_user)
    return jsonify({'result' : 'success'})
 
@@ -44,21 +62,30 @@ def add_user():
 def login() :
    login_id = request.form['login_id']
    login_pw = request.form['login_pw']
+   login_after_pw = hashlib.sha256(login_pw.encode('utf-8')).hexdigest()
    user = db.user.find_one({'user_id' : login_id})
+   print(user)
    if user :
-      password = jwt.decode(user['password'] ,'abcde' , algorithms=['HS256'])['password'] 
-      if login_pw == password :
-         session['logged_in'] = True
-         session['user_id'] = login_id
-         session['user_name'] = user['name']
-         return jsonify({'result' : 'success'})
+      payload = {
+         'id': login_id,
+         'exp': dt.datetime.utcnow() + dt.timedelta(seconds=60)
+      }
+      token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+      # session['user_name'] = user['user_id']
+      session['logged_in'] = True
+      session['user_id'] = login_id
+      session['user_name'] = user['name']
 
-   return jsonify({'result' :'fail'})
+      return jsonify({'result': 'success', 'token': token})
+
+   else:
+      return jsonify({'result' :'fail', 'msg': '아이디 혹은 비밀번호가 일치하지 않습니다.'})
 
 
 @app.route('/logout' , methods =['GET'])
 def logout():
    session.pop('user_id')
+   session.pop['sort']
    # session['logged_in'] = False
    return jsonify({'result' : 'success'})
 
@@ -71,13 +98,12 @@ def profilePage(user_id):
 
 @app.route('/registerInfo' , methods = ['POST'])
 def myprofile():
-   user_id  = request.form['user_id'];
-   my_info  = request.form['my_info'];
-   name  = request.form['name'];
+   user_id  = request.form['user_id']
+   my_info  = request.form['my_info']
+   name  = request.form['name']
    db.info.insert_one({'user_id' : user_id ,'name' : name , 'info' : my_info})
    return jsonify({'result' : 'success'})
 
-    
 @app.route('/yourProfile/<user_id>')
 def you(user_id):
    user_info = db.user.find_one({'user_id' : user_id })
@@ -87,18 +113,27 @@ def you(user_id):
 
 @app.route('/deleteInfo', methods=['POST'])
 def deleteInfo():
-   pk = request.form['pk'];
+   pk = request.form['pk']
+   db.sympathy.delete_many({'id' : pk})
    db.info.delete_one({'_id': ObjectId(pk)})
    return jsonify({'result' : 'success'})
 
 @app.route('/sympathy' ,  methods=['POST'])
 def clickSympathy() :
    user_id = request.form['user_id'];
-   person = request.form['person'];
+   sympathy_person = request.form['sympathy_person'];
+   sympathy_id = request.form['sympathy_id'];
    info = request.form['info'];
    pk = request.form['pk'];
-   db.sympathy.insert_one({'id' : pk , 'user_id' : user_id , 'info' : info , 'person' : person});
+   db.sympathy.insert_one({'id' : pk , 'user_id' : user_id , 'info' : info ,'sympathy_id' : sympathy_id , 'sympathy_person' : sympathy_person});
    return jsonify({'result' : 'success'})
+
+
+#시간순 정렬
+@app.route('/orderbytime' , methods=['GET'])
+def orderbytime():
+   session['sort'] = 1
+   return jsonify({'result': 'success'})
 
 @app.route('/callSympathy', methods=['POST'])
 def callSympathy() :
@@ -109,6 +144,7 @@ def callSympathy() :
    return jsonify({'data' : sympathy_people})
 
 
+
 if __name__ == '__main__':
-   app.secret_key = "123"
+   app.secret_key = 'super secret key'
    app.run('0.0.0.0',port=5000,debug=True)

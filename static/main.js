@@ -1,15 +1,19 @@
 function logout() {
-  $.ajax({
-    type: "GET",
-    url: "/logout",
-    data: {},
-    success: function (response) {
-      if (response["result"] == "success") {
-        alert("로그아웃 성공!");
-        window.location.href = "/";
-      }
-    },
-  });
+  // $.ajax({
+  //   type: "GET",
+  //   url: "/logout",
+  //   data: {},
+  //   success: function (response) {
+  //     if (response["result"] == "success") {
+  //       alert("로그아웃 성공!");
+  //       window.location.href = "/";
+  //     }
+  //   },
+  // });
+
+  $.removeCookie('token');
+  alert('로그아웃 성공!');
+  window.location.href ='/';
 }
 
 function login() {
@@ -22,6 +26,8 @@ function login() {
     success: function (response) {
       if (response["result"] == "success") {
         alert("로그인 성공!");
+        $.cookie("token", response["token"]);
+        // $.cookie("data", response["data"]);
         window.location.href = "/";
       } else {
         alert("로그인 실패! 아이디와 비밀번호 확인하세요");
@@ -112,6 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const modal = $trigger.dataset.target;
       const $target = document.getElementById(modal);
       // console.log($target);
+      console.log($trigger);
 
       $trigger.addEventListener("click", () => {
         openModal($target);

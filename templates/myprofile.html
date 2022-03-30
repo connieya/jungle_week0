@@ -85,6 +85,7 @@
                 {% for info in my_info %}
               <div class="list__content">
                 <div class="content__comment">{{info.info}}</div>
+                <div id="{{info._id}}" style="display: none">{{info.id}}</div>
                 <button class="button"  onclick="deleteInfo('{{info._id}}')" > 삭제 </button>
               </div>
               {% endfor %}
