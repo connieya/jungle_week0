@@ -24,10 +24,11 @@
       }
 
       function deleteInfo(pk) {
+       user_id = $(`#${pk}`).text();
        $.ajax({
          type : "POST",
          url : '/deleteInfo',
-         data : {pk : pk },
+         data : {pk : pk , user_id : user_id},
          success : function(response){
            if (response["result"] == "success") {
             window.location.reload();
@@ -39,49 +40,44 @@
   </head>
   <body>
     <header>
-      <div class="header__logo">
-        <i class="fa-brands fa-creative-commons-nd"></i>
-      </div>
-      <div class="header__title">
-        <h1 class="title is-2 title--main" style="color: white;">유대의 민족</h1>
-      </div>
       <button class="button" onclick="window.location.href='{{ url_for( 'main' ) }}';" >돌아가기</button>
     </header>
     <div class="wrap">
       <div class="card">
         <div class="card-image">
-          <figure class="image is-1by1">
+          <figure class="image is-4by3">
             <img
-              src="../static/images/{{user_info.name}}.png"
+              src="https://bulma.io/images/placeholders/1280x960.png"
               alt="Placeholder image"
             />
           </figure>
         </div>
-
+      
         <div class="card__container">
           <div class="card-name" id="user_info_name">{{user_info.name}}</div>
           <div class="card-content">
             <div class="card__header">
               <div class="card__text">
                 <span class="common__text">공감 : </span>
-                <span class="common__count">{{user_info.sympathyCount}}</span>
+                <span class="common__count">{{sympathyCnt}}</span>
               </div>
               <footer class="card-footer">
-
+                <a href="#" class="card-footer-item">수정</a>
+                <a href="#" class="card-footer-item">삭제</a>
               </footer>
             </div>
             <div class="list">
                 {% for info in my_info %}
               <div class="list__content">
                 <div class="content__comment">{{info.info}}</div>
-                <div id="{{info._id}}" style="display: none">{{info.id}}</div>
+                <div id="{{info._id}}" style="display: none">{{info.user_id}}</div>
                 <button class="button"  onclick="deleteInfo('{{info._id}}')" > 삭제 </button>
               </div>
               {% endfor %}
             </div>
 
             <div class="card__input">
-              <input class='input' id = "my_info" type="text" placeholder="나를 소개 해보아요." />
+              <input id = "my_info" type="text" placeholder="나를 소개 해보아요." />
               <button class="button" onclick="registerInfo('{{user_info.user_id}}')">등록</button>
             </div>
           </div>
@@ -90,4 +86,3 @@
     </div>
   </body>
 </html>
-
