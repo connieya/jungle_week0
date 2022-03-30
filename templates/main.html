@@ -44,7 +44,8 @@
         <!-- <button class="button is-light">로그인</button> -->
         <button class="button is-light" onclick="logout()">로그아웃</button>
         <!-- <button class="button is-info">회원가입</button> -->
-        <button class="button is-info" onclick="myprofile('{{session_id}}')">내 프로필 </button>
+        <!-- <a class="button is-info" onclick="myprofile('{{session_id}}')">내 프로필 </button> -->
+        <a class="button is-info" href={{ url_for('profilePage',  user_id = session_id ) }} )">내 프로필 </a>
       </div>
       {% else %}
       <div class="header__auth">

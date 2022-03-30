@@ -55,24 +55,36 @@ def logout():
    # session['logged_in'] = False
    return jsonify({'result' : 'success'})
 
-@app.route('/myprofile' , methods = ['GET' , 'POST'])
+@app.route('/profilepage/<user_id>')
+def profilePage(user_id):
+   user_info = db.user.find_one({'user_id' : user_id })
+   my_info = list(db.info.find({'user_id' : user_info['user_id']}))
+   return render_template('myprofile.html' ,user_info = user_info , my_info = my_info)
+
+
+@app.route('/registerInfo' , methods = ['POST'])
 def myprofile():
-   user_id =request.args.get('user_id')
-   print("@@#!!@#!@#@!" ,user_id)
-   common_content = list(db.common.find({'user_id' : user_id}))
-   print("sdadasd",common_content)
-   return render_template('myprofile.html' , user_id = user_id)   
+   user_id  = request.form['user_id'];
+   my_info  = request.form['my_info'];
+   db.info.insert_one({'user_id' : user_id , 'info' : my_info})
+   return jsonify({'result' : 'success'})
+
+    
 
 
 @app.route('/yourProfile/<user_id>')
 def you(user_id):
    user_info = db.user.find_one({'user_id' : user_id })
    print("user_info" ,type(user_info))
-   print("user_info @@@@" ,user_info['user_id'])
-   print("user_info @@@@" ,user_info['name'])
    
-   common_content = list(db.common.find({'user_id' : user_info['user_id']}))
+   common_content = list(db.info.find({'user_id' : user_info['user_id']}))
    return render_template('yourprofile.html' , common_content = common_content , user_name = user_info['name'])
+
+
+@app.route('/delete')
+def deleteInfo():
+   print("dsd");
+
 
 if __name__ == '__main__':
    app.secret_key = "123"

@@ -15,7 +15,7 @@
   </head>
   <body>
     <header>
-      <button class="button">돌아가기</button>
+      <button class="button" onclick=location.href= {{ url_for('main')}} >돌아가기</button>
     </header>
     <div class="wrap">
       <div class="card">
@@ -37,11 +37,13 @@
               </div>
             </div>
             <div class="list">
+              {% for common in common_content %}
               <div class="list__content">
-                <div class="content__comment">여행을 좋아해요.</div>
+                <div class="content__comment">{{common.info}}</div>
                 <button class="button">공감</button>
               </div>
             </div>
+            {% endfor %}
           </div>
         </div>
       </div>
