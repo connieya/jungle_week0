@@ -1,46 +1,19 @@
 function logout() {
-  $.ajax({
-    type: "GET",
-    url: "/logout",
-    data: {},
-    success: function (response) {
-      if (response["result"] == "success") {
-        alert("로그아웃 성공!");
-        window.location.href = "/";
-      }
-    },
-  });
-}
+  // $.ajax({
+  //   type: "GET",
+  //   url: "/logout",
+  //   data: {},
+  //   success: function (response) {
+  //     if (response["result"] == "success") {
+  //       alert("로그아웃 성공!");
+  //       window.location.href = "/";
+  //     }
+  //   },
+  // });
 
-function id_Chk() {
-  let login_id = $("#signup__id").val();
-
-  $.ajax({
-    type: "POST",
-    url: "/sameid",
-    data: { log_id: login_id},
-    success: function (response) {
-      if (response["result"] == "success") {
-        alert("사용할 수 있는 아이디");
-      } else if (response["result"] == "overlap"){
-        alert("중복된 아이디 입니다.");
-      }
-    },
-  });
-}
-
-function orderbytime() {
-
-  $.ajax({
-    type: "GET",
-    url: "/orderbytime",
-    data: {},
-    success: function (response) {
-      if (response["result"] == "success") {
-        window.location.href = "/";
-      }
-    },
-  });
+  $.removeCookie('token');
+  alert('로그아웃 성공!');
+  window.location.href ='/';
 }
 
 function login() {
@@ -53,6 +26,8 @@ function login() {
     success: function (response) {
       if (response["result"] == "success") {
         alert("로그인 성공!");
+        $.cookie("token", response["token"]);
+        $.cookie("data", response["data"]);
         window.location.href = "/";
       } else {
         alert("로그인 실패! 아이디와 비밀번호 확인하세요");
@@ -124,6 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const modal = $trigger.dataset.target;
       const $target = document.getElementById(modal);
       // console.log($target);
+      console.log($trigger);
 
       $trigger.addEventListener("click", () => {
         openModal($target);
