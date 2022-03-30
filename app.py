@@ -81,9 +81,12 @@ def you(user_id):
    return render_template('yourprofile.html' , common_content = common_content , user_name = user_info['name'])
 
 
-@app.route('/delete')
+@app.route('/deleteInfo', methods=['POST'])
 def deleteInfo():
-   print("dsd");
+   pk = request.form['pk'];
+   db.info.delete_one({'_id': ObjectId(pk)})
+   print(pk);
+   return jsonify({'result' : 'success'})
 
 
 if __name__ == '__main__':

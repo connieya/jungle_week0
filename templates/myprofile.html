@@ -36,11 +36,25 @@
          },
        });
       }
+
+      function deleteInfo(pk) {
+       $.ajax({
+         type : "POST",
+         url : '/deleteInfo',
+         data : {pk : pk },
+         success : function(response){
+           if (response["result"] == "success") {
+            window.location.reload();
+      }
+
+         },
+       });
+      }
     </script>
   </head>
   <body>
     <header>
-      <a href={{ url_for('main') }}  >돌아가기</a>
+      <button class="button" onclick="window.location.href='{{ url_for( 'main' ) }}';" >돌아가기</button>
     </header>
     <div class="wrap">
       <div class="card">
@@ -70,7 +84,7 @@
                 {% for info in my_info %}
               <div class="list__content">
                 <div class="content__comment">{{info.info}}</div>
-                <button class="button" onclick=window.location.href={{ url_for ( 'deleteInfo' ) }} > 삭제 </button>
+                <button class="button"  onclick="deleteInfo('{{info._id}}')" > 삭제 </button>
               </div>
               {% endfor %}
             </div>
