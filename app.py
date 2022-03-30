@@ -129,11 +129,22 @@ def clickSympathy() :
    db.sympathy.insert_one({'id' : pk , 'user_id' : user_id , 'info' : info , 'person' : person});
    return jsonify({'result' : 'success'})
 
+
 #시간순 정렬
 @app.route('/orderbytime' , methods=['GET'])
 def orderbytime():
    session['sort'] = 1
    return jsonify({'result': 'success'})
+
+@app.route('/callSympathy', methods=['POST'])
+def callSympathy() :
+   info_pk = request.form['info_pk']
+   print("ddsda", info_pk);
+   sympathy_people = list(db.sympathy.find({'id' : info_pk },{'_id':False}))
+   print("sympathy !!!" , sympathy_people)
+   return jsonify({'data' : sympathy_people})
+
+
 
 if __name__ == '__main__':
    app.secret_key = 'super secret key'
