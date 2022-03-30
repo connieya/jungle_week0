@@ -19,6 +19,7 @@
 
 body {
   margin: 0;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 i {
@@ -68,7 +69,7 @@ section {
   margin: 20px;
 }
 
-.card-content > .content__name {
+.card-content {
   text-align: center;
 }
 
@@ -77,4 +78,38 @@ span {
 }
 
 /* Footer */
+
+/* Modal */
+.box {
+  margin: auto;
+}
+
+#modal-js-example--login > div.modal-content > div {
+  width: 450px;
+}
+
+.login__input, .signup__input {
+  display:flex;
+  flex-direction: column;
+}
+
+.absolute {
+  position: relative;
+}
+
+#recheck {
+  position: absolute;
+  top: 30px;
+  right: 25px;
+  height: 30px;
+  border: none;
+}
+
+.fa-circle-check {
+  margin-left: 3px;
+}
+
+.title {
+  text-align: center;
+}
 

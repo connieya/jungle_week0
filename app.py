@@ -18,7 +18,14 @@ def main():
 
    return render_template('main.html' , login = False , users = user_list)
 
+@app.route('/idOverlap', methods=['POST'])
+def same_id():
 
+   if list(db.user.find({'user_id' :request.form['log_id']})):
+      print("aaaaaa")
+      return jsonify({'result': 'overlap'})
+   else:
+      return jsonify({'result': 'success'})
 
 
 @app.route('/signUp',methods = ['POST'])

@@ -6,6 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>main</title>
 
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
     <!-- 데이터 설정 -->
     <meta />
 
@@ -125,36 +133,46 @@
 
         <div class="modal-content">
           <div class="box">
-            <p>로그인</p>
+            <h1 class="title">로그인</h1>
             <!-- Your content -->
-            <div>
+            <div class="login__input">
               <label for="login__id">ID</label>
               <br />
+
               <input
+                class="input"
                 type="text"
                 placeholder="아이디를 입력하세요."
                 id="login__id"
                 name="login__id"
               />
               <br />
+
               <label for="login__password">Password</label>
               <br />
-              <input
-                type="password"
-                placeholder="비밀번호를 입력하세요."
-                id="login__password"
-                name="login_password"
-              />
+
+              <div class="field">
+                <p class="control has-icons-left">
+                  <input class="input" type="password" placeholder="Password" id="login__password"
+                  name="login_password">
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-lock"></i>
+                  </span>
+                </p>
+              </div>
               <br />
-              <button class="button signup__complete" onclick="login()">
+
+              <div class="login__buttons">
+                <button class="button signup__complete" onclick="login()">
                 로그인
-              </button>
-              <button
+                </button>
+                <button
                 class="button signup__cancel"
                 onclick="location.href= '/'"
               >
                 취소
-              </button>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -167,46 +185,72 @@
 
         <div class="modal-content">
           <div class="box">
-            <p>회원가입</p>
+            <h1 class="title">회원가입</h1>
             <!-- Your content -->
-            <div>
+            <div class="signup__input">
               <!--  form 태그 대신 div 태그 -->
+              <div>
               <label for="signup__name">이름을 입력하세요.</label>
               <br />
               <input
+              class="input"
                 type="text"
                 placeholder="이름을 입력해주세요."
                 id="signup__name"
                 name="signup__name"
               />
+            </div>
               <br />
-              <label for="signup__id">아이디를 입력하세요.</label>
+
+              <div class="absolute"> 
+
+              <label for="signup__id">아이디를 입력하세요.
+
+              </label>
               <br />
               <input
+              class="input"
                 type="text"
                 placeholder="아이디를 입력해주세요."
                 id="signup__id"
                 name="signup__id"
               />
+              <button class="button" id="recheck" onclick="idOverlap()">중복 체크<i class="fa-solid fa-circle-check"></i></button>
+            </div>
               <br />
+
+              <div>
               <label for="signup__password">비밀번호를 입력하세요.</label>
               <br />
-              <input
-                type="password"
-                placeholder="비밀번호를 입력해주세요."
-                id="signup__password"
-                name="signup__password"
-              />
-              <br />
+
+              <div class="field">
+                <p class="control has-icons-left">
+                  <input class="input" type="password" placeholder="Password" id="signup__password"
+                  name="signup__password">
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-lock"></i>
+                  </span>
+                </p>
+              </div>
+            </div>
+            <br />
+
+            <div>
               <label for="signup__password--re">비밀번호를 재확인하세요.</label>
+
+              <div class="field">
+                <p class="control has-icons-left">
+                  <input class="input" type="password" placeholder="Password"                 id="signup__password--re"
+                  name="signup__password--re">
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-lock"></i>
+                  </span>
+                </p>
+              </div>
+            </div>
               <br />
-              <input
-                type="password"
-                placeholder="비밀번호를 재확인해주세요."
-                id="signup__password--re"
-                name="signup__password--re"
-              />
-              <br />
+
+              <div class="signup__buttons">
               <button class="button signup__complete" onclick="signup()">
                 회원가입
               </button>
@@ -216,6 +260,7 @@
               >
                 취소
               </button>
+            </div>
             </div>
             <!-- form 태그 대신 div 태그 -->
           </div>

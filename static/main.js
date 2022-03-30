@@ -56,16 +56,35 @@ function signup() {
   });
 }
 
-function myprofile(user_id){
-  console.log("sdsad",user_id)
-   $.ajax({
-     type: "GET",
-     url: "/myprofile",
-     data: { user_id: user_id},
-     success: function (response) {
-       console.log("response =>" , response)
-     },
-   });
+function myprofile(user_id) {
+  console.log("sdsad", user_id);
+  $.ajax({
+    type: "GET",
+    url: "/myprofile",
+    data: { user_id: user_id },
+    success: function (response) {
+      console.log("response =>", response);
+    },
+  });
+}
+
+function idOverlap(){
+  let login_id = $("#signup__id").val();
+
+  $.ajax({
+    type: "POST",
+    url: "/idOverlap",
+    data: { log_id: login_id},
+    success: function (response) {
+      if (response["result"] == "success") {
+        document.querySelector('.fa-circle-check').style.color = 'green';
+        alert("사용가능한 아이디입니다.")
+      } else if(response["result"] == "overlap"){
+        document.querySelector('.fa-circle-check').style.color = 'black';
+        alert("아이디가 중복입니다.");
+      }
+    },
+  });
 }
 
 function makeCard() {}
