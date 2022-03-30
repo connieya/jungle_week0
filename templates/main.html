@@ -62,9 +62,9 @@ function callSympathyCount(user_id){
       <article>
         <div class="article__container">
           <div class="article__button--sort">
-            <button class="button is-white">공감 순</button>
+            <button class="button is-white" onclick="window.location.href='{{ url_for ( 'sortBySympathy') }}'">공감 순</button>
             <span>|</span>
-            <button class="button is-white">최신 순</button>
+            <button class="button is-white"  onclick="window.location.href='{{ url_for ( 'sortByRecent') }}'">최신 순</button>
           </div>
           <div class="article__card--container">
             {% for user in users %}
