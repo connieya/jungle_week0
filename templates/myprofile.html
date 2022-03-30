@@ -39,10 +39,12 @@
       }
 
       function deleteInfo(pk) {
+       user_id = $(`#${pk}`).text();
+       
        $.ajax({
          type : "POST",
          url : '/deleteInfo',
-         data : {pk : pk },
+         data : {pk : pk , user_id : user_id},
          success : function(response){
            if (response["result"] == "success") {
             window.location.reload();
@@ -73,7 +75,7 @@
             <div class="card__header">
               <div class="card__text">
                 <span class="common__text">공감 : </span>
-                <span class="common__count">{{user_info.sympathyCount}}</span>
+                <span class="common__count">{{sympathyCnt}}</span>
               </div>
               <footer class="card-footer">
                 <a href="#" class="card-footer-item">수정</a>
@@ -84,7 +86,7 @@
                 {% for info in my_info %}
               <div class="list__content">
                 <div class="content__comment">{{info.info}}</div>
-                <div id="{{info._id}}" style="display: none">{{info.id}}</div>
+                <div id="{{info._id}}" style="display: none">{{info.user_id}}</div>
                 <button class="button"  onclick="deleteInfo('{{info._id}}')" > 삭제 </button>
               </div>
               {% endfor %}
