@@ -52,9 +52,13 @@ def add_user():
    d = dt.datetime.now()
    t = str(d.year) + str(d.month) + str(d.day) + str(d.hour) + str(d.minute) + str(d.second)
    timenow = int(t)
-   new_user = {'user_id' : user_id , 'name' : user_name , 'password' : after_password, 'time' : timenow}
-   db.user.insert_one(new_user)
-   return jsonify({'result' : 'success'})
+
+   if list(db.user.find({'user_id' :user_id})):
+      return jsonify({'result': 'overlap'})
+   else:
+      new_user = {'user_id' : user_id , 'name' : user_name , 'password' : after_password, 'time' : timenow}
+      db.user.insert_one(new_user)
+      return jsonify({'result' : 'success'})
 
 
 

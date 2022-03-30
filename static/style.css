@@ -15,11 +15,12 @@
 
 * {
   box-sizing: border-box;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 body {
   margin: 0;
-  font-family: 'Noto Sans KR', sans-serif;
+
 }
 
 i {
@@ -32,14 +33,25 @@ i {
 /* Header */
 
 header {
+  background: url('/static/images/background.png');
   position: fixed;
   width: 100%;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 20px 0 50px 0;
+  padding: 20px 0 20px 0;
   z-index: 1;
   background-color: white;
+}
+
+.fa-brands {
+  color: white;
+}
+
+.title {
+  position: relative;
+  left: 80px;
+  color: white;
 }
 
 /* Section */
@@ -48,8 +60,10 @@ section {
 }
 
 .article__container {
+  max-width: 1200px;
     display: flex;
     flex-direction: column;
+    margin: auto;
 }
 
 .article__button--sort {

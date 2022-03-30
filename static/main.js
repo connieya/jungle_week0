@@ -1,3 +1,5 @@
+
+
 function logout() {
   // $.ajax({
   //   type: "GET",
@@ -11,9 +13,9 @@ function logout() {
   //   },
   // });
 
-  $.removeCookie('token');
-  alert('로그아웃 성공!');
-  window.location.href ='/';
+  $.removeCookie("token");
+  alert("로그아웃 성공!");
+  window.location.href = "/";
 }
 
 function login() {
@@ -46,6 +48,15 @@ function signup() {
     return;
   }
 
+  if (
+    id.length == 0 ||
+    name.length == 0 ||
+    password.length == 0 ||
+    password_re.length == 0
+  ) {
+    alert(1);
+  }
+
   $.ajax({
     type: "POST",
     url: "/signUp",
@@ -54,9 +65,10 @@ function signup() {
       if (response["result"] == "success") {
         alert("회원가입 성공!");
         window.location.href = "/";
+      } else if (response["result"] === "overlap") {
+        alert("회원가입 실패");
       } else {
         alert("회원가입 실패");
-        window.location.reload();
       }
     },
   });
@@ -74,22 +86,30 @@ function myprofile(user_id) {
   });
 }
 
-function idOverlap(){
+function idOverlap() {
   let login_id = $("#signup__id").val();
 
   $.ajax({
     type: "POST",
     url: "/idOverlap",
-    data: { log_id: login_id},
+    data: { log_id: login_id },
     success: function (response) {
       if (response["result"] == "success") {
-        document.querySelector('.fa-circle-check').style.color = 'green';
-        alert("사용가능한 아이디입니다.")
-      } else if(response["result"] == "overlap"){
-        document.querySelector('.fa-circle-check').style.color = 'black';
+        document.querySelector(".fa-circle-check").style.color = "green";
+        alert("사용가능한 아이디입니다.");
+        document.querySelector(".signup__complete").removeAttribute("disabled");
+      } else if (response["result"] == "overlap") {
+        document.querySelector(".fa-circle-check").style.color = "black";
         alert("아이디가 중복입니다.");
+        document
+          .querySelector(".signup__complete")
+          .setAttribute("disabled", true);
       }
     },
+  });
+
+  $("#signup__id").on("propertychange change keyup paste input", function(){
+    document.querySelector(".fa-circle-check").style.color = "black";
   });
 }
 
