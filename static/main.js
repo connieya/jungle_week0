@@ -12,6 +12,37 @@ function logout() {
   });
 }
 
+function id_Chk() {
+  let login_id = $("#signup__id").val();
+
+  $.ajax({
+    type: "POST",
+    url: "/sameid",
+    data: { log_id: login_id},
+    success: function (response) {
+      if (response["result"] == "success") {
+        alert("사용할 수 있는 아이디");
+      } else if (response["result"] == "overlap"){
+        alert("중복된 아이디 입니다.");
+      }
+    },
+  });
+}
+
+function orderbytime() {
+
+  $.ajax({
+    type: "GET",
+    url: "/orderbytime",
+    data: {},
+    success: function (response) {
+      if (response["result"] == "success") {
+        window.location.href = "/";
+      }
+    },
+  });
+}
+
 function login() {
   let login_id = $("#login__id").val();
   let login_pw = $("#login__password").val();

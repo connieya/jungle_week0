@@ -75,7 +75,7 @@
           <div class="article__button--sort">
             <button class="button is-white">공감 순</button>
             <span>|</span>
-            <button class="button is-white">최신 순</button>
+            <button class="button is-white" onclick="orderbytime()">최신 순</button>
           </div>
           <div class="article__card--container">
             {% for user in users %}
@@ -188,6 +188,9 @@
                 id="signup__id"
                 name="signup__id"
               />
+              <button class="button signup__complete" onclick="id_Chk()">
+                아이디 중복확인
+              </button>
               <br />
               <label for="signup__password">비밀번호를 입력하세요.</label>
               <br />
