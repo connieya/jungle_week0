@@ -18,6 +18,10 @@ SECRET_KEY = 'threeeeee'
 def main():
 
    token_receive = request.cookies.get('token')
+   # if session['sort'] == 1:
+   #    user_list = list(db.user.find({}, {'_id': False}).sort('time', -1))
+   # else:
+   #    user_list = list(db.user.find({}))
    user_list = list(db.user.find({}))
    try:
       payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
@@ -33,29 +37,28 @@ def main():
       print("except")
       return render_template('main.html' , login = False , users = user_list)
 
-   # id_receive = request.cookies.get('data')
-   # # data = request.cookies.get('data')
 
-   # try:
-   #    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-   #    print('try')
-   #    return render_template('main.html', users = user_list)
+#아이디 중복확인
+@app.route('/sameid', methods=['POST'])
+def same_id():
 
-   # except jwt.ExpiredSignatureError:
-   #    print('except')
-   #    return redirect(url_for('home', token_expired='로그인 시간이 만료되었습니다.'))
-   # except jwt.exceptions.DecodeError:
-   #    print('except')
-   #    return redirect(url_for('home'))
-
+   print(list(db.user.find({'user_id' :request.form['log_id']})))
+   if list(db.user.find({'user_id' :request.form['log_id']})):
+      print("aaaaaa")
+      return jsonify({'result': 'overlap'})
+   else:
+      return jsonify({'result': 'success'})
 
 @app.route('/signUp',methods = ['POST'])
 def add_user():
    before_password = request.form['user_pw']
-   after_password = hashlib.sha256(before_password.encode('utf-8')).hexdigest()
+   after_password = jwt.encode({'password' : before_password} , 'abcde' , algorithm = 'HS256')
    user_name  = request.form['user_name']
    user_id = request.form['user_id']
-   new_user = {'user_id' : user_id , 'name' : user_name , 'password' : after_password}
+   d = dt.datetime.now()
+   t = str(d.year) + str(d.month) + str(d.day) + str(d.hour) + str(d.minute) + str(d.second)
+   timenow = int(t)
+   new_user = {'user_id' : user_id , 'name' : user_name , 'password' : after_password, 'time' : timenow}
    db.user.insert_one(new_user)
    return jsonify({'result' : 'success'})
 
@@ -88,6 +91,7 @@ def login() :
 @app.route('/logout' , methods =['GET'])
 def logout():
    session.pop('user_id')
+   session.pop['sort']
    # session['logged_in'] = False
    return jsonify({'result' : 'success'})
 
@@ -128,6 +132,11 @@ def clickSympathy() :
    db.sympathy.insert_one({'id' : pk , 'user_id' : user_id , 'info' : info , 'person' : person});
    return jsonify({'result' : 'success'})
 
+#시간순 정렬
+@app.route('/orderbytime' , methods=['GET'])
+def orderbytime():
+   session['sort'] = 1
+   return jsonify({'result': 'success'})
 
 if __name__ == '__main__':
    app.secret_key = 'super secret key'
