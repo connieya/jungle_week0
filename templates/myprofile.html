@@ -47,7 +47,6 @@
            if (response["result"] == "success") {
             window.location.reload();
       }
-
          },
        });
       }
@@ -74,7 +73,7 @@
             <div class="card__header">
               <div class="card__text">
                 <span class="common__text">공감 : </span>
-                <span class="common__count">4</span>
+                <span class="common__count">{{user_info.sympathyCount}}</span>
               </div>
               <footer class="card-footer">
                 <a href="#" class="card-footer-item">수정</a>

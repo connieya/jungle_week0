@@ -1,3 +1,4 @@
+from ast import If
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
 from pymongo import MongoClient
 from bson import ObjectId
@@ -55,7 +56,7 @@ def add_user():
    d = dt.datetime.now()
    t = str(d.year) + str(d.month) + str(d.day) + str(d.hour) + str(d.minute) + str(d.second)
    timenow = int(t)
-   new_user = {'user_id' : user_id , 'name' : user_name , 'password' : after_password, 'time' : timenow}
+   new_user = {'user_id' : user_id , 'name' : user_name , 'password' : after_password, 'time' : timenow , 'sympathyCount' : 0}
    db.user.insert_one(new_user)
    return jsonify({'result' : 'success'})
 
@@ -71,7 +72,7 @@ def login() :
    if user :
       payload = {
          'id': login_id,
-         'exp': dt.datetime.utcnow() + dt.timedelta(seconds=60)
+         'exp': dt.datetime.utcnow() + dt.timedelta(seconds=8600)
       }
       token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
       # session['user_name'] = user['user_id']
@@ -92,23 +93,23 @@ def logout():
    # session['logged_in'] = False
    return jsonify({'result' : 'success'})
 
-@app.route('/profilepage/<user_id>')
-def profilePage(user_id):
-   user_info = db.user.find_one({'user_id' : user_id })
-   my_info = list(db.info.find({'user_id' : user_info['user_id']}))
-   return render_template('myprofile.html' ,user_info = user_info , my_info = my_info)
-
-
 @app.route('/registerInfo' , methods = ['POST'])
-def myprofile():
+def registerInfo():
    user_id  = request.form['user_id']
    my_info  = request.form['my_info']
    name  = request.form['name']
    db.info.insert_one({'user_id' : user_id ,'name' : name , 'info' : my_info})
    return jsonify({'result' : 'success'})
 
+
+@app.route('/myProfile/<user_id>')
+def myProfile(user_id):
+   user_info = db.user.find_one({'user_id' : user_id })
+   my_info = list(db.info.find({'user_id' : user_info['user_id']}))
+   return render_template('myprofile.html' ,user_info = user_info , my_info = my_info)
+
 @app.route('/yourProfile/<user_id>')
-def you(user_id):
+def yourProfile(user_id):
    user_info = db.user.find_one({'user_id' : user_id })
    common_content = list(db.info.find({'user_id' : user_info['user_id']}))
    return render_template('yourprofile.html' , common_content = common_content , user_name = user_info['name'] , user_id = user_info['user_id'])
@@ -126,10 +127,19 @@ def clickSympathy() :
    user_id = request.form['user_id'];
    sympathy_person = request.form['sympathy_person'];
    sympathy_id = request.form['sympathy_id'];
-   info = request.form['info'];
+   comment = request.form['info'];
    pk = request.form['pk'];
-   db.sympathy.insert_one({'id' : pk , 'user_id' : user_id , 'info' : info ,'sympathy_id' : sympathy_id , 'sympathy_person' : sympathy_person});
-   return jsonify({'result' : 'success'})
+   print("ddd",comment, user_id ,sympathy_person , sympathy_id ,pk)
+   print("1111",len(comment))
+   sympathy_value = db.sympathy.find_one({'id' :pk , 'sympathy_id' : sympathy_id })
+   if sympathy_value == None :
+      db.sympathy.insert_one({'id' : pk , 'user_id' : user_id , 'info' : comment ,'sympathy_id' : sympathy_id , 'sympathy_person' : sympathy_person});
+      return jsonify({'result' : 'success'})
+   else :
+      print("이미 공감 누름")
+      db.sympathy.delete_one({'id' : pk , 'sympathy_id' : sympathy_id} )
+      return jsonify({'result' : 'fail'})
+
 
 
 #시간순 정렬
@@ -141,9 +151,7 @@ def orderbytime():
 @app.route('/callSympathy', methods=['POST'])
 def callSympathy() :
    info_pk = request.form['info_pk']
-   print("ddsda", info_pk);
    sympathy_people = list(db.sympathy.find({'id' : info_pk },{'_id':False}))
-   print("sympathy !!!" , sympathy_people)
    return jsonify({'data' : sympathy_people})
 
 
