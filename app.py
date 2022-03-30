@@ -8,11 +8,11 @@ app = Flask(__name__)
 client = MongoClient('localhost',27017)
 db = client.week1
 
-SECRET_KEY = 'three'
+SECRET_KEY = 'threeeeee'
 
-@app.route('/home')
-def home():
-   return render_template('main.html')
+# @app.route('/home')
+# def home():
+#    return render_template('main.html')
 
 @app.route('/')
 def main():
@@ -57,16 +57,16 @@ def login() :
    login_id = request.form['login_id']
    login_pw = request.form['login_pw']
    login_after_pw = hashlib.sha256(login_pw.encode('utf-8')).hexdigest()
-   user = db.user.find_one({'user_id' : login_id}, {'password': login_after_pw})
+   user = db.user.find_one({'user_id' : login_id})
    print(user)
    if user :
       payload = {
          'id': login_id,
          'exp': dt.datetime.utcnow() + dt.timedelta(seconds=3000)
       }
-      
       token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-      session['user_name'] = user['user_id']
+      # session['user_name'] = user['user_id']
+      session['user_name'] = user['name']
 
       return jsonify({'result': 'success', 'token': token})
 
@@ -119,4 +119,5 @@ def clickSympathy() :
 
 
 if __name__ == '__main__':
+   app.secret_key = 'super secret key'
    app.run('0.0.0.0',port=5000,debug=True)
