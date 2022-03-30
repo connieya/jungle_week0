@@ -16,13 +16,18 @@ SECRET_KEY = 'threeeeee'
 # def home():
 #    return render_template('main.html')
 
+key = 1
+
 @app.route('/')
 def main():
-   # if session['sort'] == 1:
-   #    user_list = list(db.mystar.find({}, {'_id': False}).sort('time', -1))
+   global key
+   if key == 1:
+      user_list = list(db.user.find({}, {'_id': False}).sort('time', -1))
+   else :
+      user_list = list(db.user.find({},{'_id': False}).sort('sympathyCount', -1))
 
    token_receive = request.cookies.get('token')
-   user_list = list(db.user.find({}))
+   
    try:
       payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
       print("try")
@@ -124,7 +129,6 @@ def deleteInfo():
    pk = request.form['pk'] # 유저 글 고유 번호
    user_id = request.form['user_id'] # 마이 프로필 글 삭제하는 유저 아이디
    sympathyList = list(db.sympathy.find({'id' : pk}))
-   print(len(sympathyList))
    user = db.user.find_one({'user_id' : user_id},{'_id':False})
    db.sympathy.delete_many({'id' : pk})
    db.user.update_one({'user_id' : user_id},{'$set' : {'sympathyCount' :user['sympathyCount']-len(sympathyList)}})
@@ -143,7 +147,6 @@ def clickSympathy() :
    sympathy_value = db.sympathy.find_one({'id' :pk , 'sympathy_id' : sympathy_id })
    if sympathy_value == None :
       db.sympathy.insert_one({'id' : pk , 'user_id' : user_id , 'info' : comment ,'sympathy_id' : sympathy_id , 'sympathy_person' : sympathy_person});
-      print("ddd",user['sympathyCount'])
       db.user.update_one({'user_id' : user_id},{'$set' : {'sympathyCount' :user['sympathyCount']+1}})
       return jsonify({'result' : 'success'})
    else :
@@ -190,10 +193,22 @@ def upload():
 def callSympathyCount() :
    user_id = request.form['user_id']
    sympathy_people = list(db.sympathy.find({'user_id' : user_id },{'_id':False}))
-   print("flask 서버 확인 !!!", sympathy_people)
-   print("flask 서버 확인 !!222!", len(sympathy_people))
    return jsonify({'data' : sympathy_people})
 
+
+@app.route('/sortByRecent')
+def sortByRecent() :
+   global key
+   print("서버 통신 최신순")
+   key = 1;
+   return redirect(url_for('main' , key = 1))
+
+@app.route('/sortBySympathy')
+def sortBySympathy() :
+   global key
+   print("서버 통신 공감순")
+   key = 2;
+   return redirect(url_for('main'))
 
 if __name__ == '__main__':
    app.secret_key = 'super secret key'
