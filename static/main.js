@@ -27,7 +27,7 @@ function login() {
       if (response["result"] == "success") {
         alert("로그인 성공!");
         $.cookie("token", response["token"]);
-        $.cookie("data", response["data"]);
+        // $.cookie("data", response["data"]);
         window.location.href = "/";
       } else {
         alert("로그인 실패! 아이디와 비밀번호 확인하세요");

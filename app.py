@@ -21,7 +21,6 @@ def main():
       user_id = session['user_id']
       return render_template('main.html', session_id = user_id , login = True , users = user_list)
 
-
    return render_template('main.html' , login = False , users = user_list)
 
    # token_receive = request.cookies.get('token')
@@ -60,14 +59,14 @@ def login() :
    login_after_pw = hashlib.sha256(login_pw.encode('utf-8')).hexdigest()
    user = db.user.find_one({'user_id' : login_id}, {'password': login_after_pw})
    print(user)
-   if user is not None:
+   if user :
       payload = {
          'id': login_id,
          'exp': dt.datetime.utcnow() + dt.timedelta(seconds=3000)
       }
       
-      token = jwt.encode(payload, SECRET_KEY, algorithm='HS256').decode('utf-8')
-      session['user_name'] = user['name']
+      token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+      session['user_name'] = user['user_id']
 
       return jsonify({'result': 'success', 'token': token})
 
