@@ -39,6 +39,24 @@ function login() {
   });
 }
 
+function idOverlap(){
+  let login_id = $("#signup__id").val();
+
+  $.ajax({
+    type: "POST",
+    url: "/idOverlap",
+    data: { log_id: login_id},
+    success: function (response) {
+      if (response["result"] == "success") {
+        alert("사용가능한 아이디입니다!")
+      } else if(response["result"] == "overlap"){
+        alert("아이디가 중복입니다.");
+      }
+    },
+  });
+}
+
+
 function signup() {
   let id = $("#signup__id").val();
   let name = $("#signup__name").val();
@@ -55,7 +73,8 @@ function signup() {
     password.length == 0 ||
     password_re.length == 0
   ) {
-    alert(1);
+    alert("입력란을 모두 입력하세요");
+    return
   }
 
   $.ajax({

@@ -4,6 +4,7 @@ from pymongo import MongoClient
 from bson import ObjectId
 import jwt, json, hashlib
 import datetime as dt
+import gridfs
 
 app = Flask(__name__)
 client = MongoClient('localhost',27017)
@@ -17,9 +18,10 @@ SECRET_KEY = 'threeeeee'
 
 @app.route('/')
 def main():
+   # if session['sort'] == 1:
+   #    user_list = list(db.mystar.find({}, {'_id': False}).sort('time', -1))
 
    token_receive = request.cookies.get('token')
-   
    user_list = list(db.user.find({}))
    try:
       payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
@@ -27,7 +29,6 @@ def main():
       if "user_id" in session :
          user_id = session['user_id']
          return render_template('main.html', session_id = user_id , login = True , users = user_list)
-
    except jwt.ExpiredSignatureError:
       print("except")
       return render_template('main.html' , login = False , users = user_list)
@@ -35,6 +36,9 @@ def main():
       print("except")
       return render_template('main.html' , login = False , users = user_list)
 
+
+
+#아이디 중복확인
 @app.route('/idOverlap', methods=['POST'])
 def same_id():
    if list(db.user.find({'user_id' :request.form['log_id']})):
@@ -47,7 +51,7 @@ def same_id():
 @app.route('/signUp',methods = ['POST'])
 def add_user():
    before_password = request.form['user_pw']
-   after_password = jwt.encode({'password' : before_password} , 'abcde' , algorithm = 'HS256')
+   after_password = hashlib.sha256(before_password.encode('utf-8')).hexdigest()
    user_name  = request.form['user_name']
    user_id = request.form['user_id']
    d = dt.datetime.now()
@@ -65,7 +69,7 @@ def login() :
    login_id = request.form['login_id']
    login_pw = request.form['login_pw']
    login_after_pw = hashlib.sha256(login_pw.encode('utf-8')).hexdigest()
-   user = db.user.find_one({'user_id' : login_id})
+   user = db.user.find_one({'user_id' : login_id, 'password': login_after_pw})
    print(user)
    if user :
       payload = {
@@ -154,6 +158,7 @@ def clickSympathy() :
 @app.route('/orderbytime' , methods=['GET'])
 def orderbytime():
    session['sort'] = 1
+   # stars = list(db.mystar.find({}, {'_id': False}).sort('time', -1))
    return jsonify({'result': 'success'})
 
 @app.route('/callSympathy', methods=['POST'])
@@ -162,6 +167,24 @@ def callSympathy() :
    sympathy_people = list(db.sympathy.find({'id' : info_pk },{'_id':False}))
    return jsonify({'data' : sympathy_people})
 
+@app.route("/upload", methods=['POST'])
+def upload():
+	## file upload ##
+    img = request.files['image']
+    
+    ## GridFs를 통해 파일을 분할하여 DB에 저장하게 된다
+    fs = gridfs.GridFS(db)
+    fs.put(img, filename = 'name')
+    
+    ## file find ##
+    data = client.grid_file.fs.files.find_one({'filename':'name'})
+    
+    ## file download ##
+    my_id = data['_id']
+    outputdata = fs.get(my_id).read()
+    output = open('./images/'+'back.jpeg', 'wb')
+    output.write(outputdata)
+    return jsonify({'msg':'저장에 성공했습니다.'})
 
 @app.route('/callSympathyCount' , methods=['POST'])
 def callSympathyCount() :
