@@ -116,17 +116,19 @@ def you(user_id):
 
 @app.route('/deleteInfo', methods=['POST'])
 def deleteInfo():
-   pk = request.form['pk'];
+   pk = request.form['pk']
+   db.sympathy.delete_many({'id' : pk})
    db.info.delete_one({'_id': ObjectId(pk)})
    return jsonify({'result' : 'success'})
 
 @app.route('/sympathy' ,  methods=['POST'])
 def clickSympathy() :
    user_id = request.form['user_id'];
-   person = request.form['person'];
+   sympathy_person = request.form['sympathy_person'];
+   sympathy_id = request.form['sympathy_id'];
    info = request.form['info'];
    pk = request.form['pk'];
-   db.sympathy.insert_one({'id' : pk , 'user_id' : user_id , 'info' : info , 'person' : person});
+   db.sympathy.insert_one({'id' : pk , 'user_id' : user_id , 'info' : info ,'sympathy_id' : sympathy_id , 'sympathy_person' : sympathy_person});
    return jsonify({'result' : 'success'})
 
 
