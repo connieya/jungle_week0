@@ -1,31 +1,27 @@
-"use strict";
+function logout() {
+  $.ajax({
+    type: "GET",
+    url: "/logout",
+    data: {},
+    success: function (response) {
+      if (response["result"] == "success") {
+        alert("로그아웃 성공!");
+        window.location.href = "/";
+      }
+    },
+  });
+}
 
-// Sign Up
-// function signup() {
-//   const signupName = document.querySelector("#signup__name");
-//   const signupId = document.querySelector("#signup__id");
-//   const signupPassword = document.querySelector("#signup__password");
-//   const signupPasswordRe = document.querySelector("#signup__password--re");
-
-//   console.log(signupName.value);
-
-//   $.ajax({
-//     type: "POST",
-//     url: "",
-//     data: {},
-//     success: function (response) {},
-//   });
-// }
 function login() {
   let login_id = $("#login__id").val();
   let login_pw = $("#login__password").val();
-  console.log(login_id ,login_pw)
+  console.log(login_id, login_pw);
   $.ajax({
     type: "POST",
     url: "/login",
-    data: { 'login_id' : login_id, 'login_pw': login_pw },
+    data: { login_id: login_id, login_pw: login_pw },
     success: function (response) {
-      console.log("~~~~~~~##".response)
+      console.log("~~~~~~~##".response);
       if (response["result"] == "success") {
         alert("로그인 성공!");
         window.location.href = "/";
@@ -61,6 +57,19 @@ function signup() {
       }
     },
   });
+}
+
+function myprofile(user_id){
+  console.log("sdsad",user_id)
+   $.ajax({
+     type: "GET",
+     url: "/myprofile",
+     data: { user_id: user_id},
+     success: function (response) {
+       console.log("response =>" , response)
+       window.location.href = '/myprofile'
+     },
+   });
 }
 
 function makeCard() {}

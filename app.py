@@ -2,6 +2,7 @@ from crypt import methods
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for, send_from_directory
 from pymongo import MongoClient  
 from bson import ObjectId
+<<<<<<< HEAD
 import jwt
 import requests
 # from werkzeug.utils import secure_filename
@@ -112,6 +113,27 @@ def my_profile():
 #       #os.path.join(app.config['UPLOAD_FOLDER']
 #       f.save('/Users/angel/Documents/week00/jungle_week0/static', secure_filename(f.filename))
 #       return 'file uploaded successfully'
+=======
+import jwt,json
+
+app = Flask(__name__)
+client = MongoClient('localhost',27017)
+db = client.week1
+
+
+@app.route('/')
+def main():
+   user_list = list(db.user.find({}))
+   if "user_id" in session :
+      user_id = session['user_id']
+      return render_template('main.html', session_id = user_id , login = True , users = user_list)
+
+
+   return render_template('main.html' , login = False , users = user_list)
+
+
+
+>>>>>>> 8f9973d2032a01958f5ccb0d68cfb060f52ee991
 
 =======
 @app.route('/signUp',methods = ['POST'])
@@ -124,6 +146,8 @@ def add_user():
    db.user.insert_one(new_user)
    return jsonify({'result' : 'success'})
 
+
+
 @app.route('/login' , methods=['POST'])
 def login() :
    login_id = request.form['login_id']
@@ -132,15 +156,39 @@ def login() :
    if user :
       password = jwt.decode(user['password'] ,'abcde' , algorithms=['HS256'])['password'] 
       if login_pw == password :
-         session['loggied_in'] = True
-         # cname = db.user.find_one({'user_id' , login_id})
-         # session['membername'] = cname['username']
-         session['user_id'] = user['user_id']
+         session['logged_in'] = True
+         session['user_id'] = login_id
          session['user_name'] = user['name']
          return jsonify({'result' : 'success'})
 
    return jsonify({'result' :'fail'})
 >>>>>>> 52eb23c96a8842ee5f6dd723da207fea2c8e039e
+
+
+@app.route('/logout' , methods =['GET'])
+def logout():
+   session.pop('user_id')
+   # session['logged_in'] = False
+   return jsonify({'result' : 'success'})
+
+@app.route('/myprofile' , methods = ['GET' , 'POST'])
+def myprofile():
+   user_id =request.args.get('user_id')
+   print("@@#!!@#!@#@!" ,user_id)
+   common_content = list(db.common.find({'user_id' : user_id}))
+   print("sdadasd",common_content)
+   return render_template('myprofile.html' , user_id = user_id)   
+
+
+@app.route('/yourProfile/<user_id>')
+def you(user_id):
+   user_info = db.user.find_one({'user_id' : user_id })
+   print("user_info" ,type(user_info))
+   print("user_info @@@@" ,user_info['user_id'])
+   print("user_info @@@@" ,user_info['name'])
+   
+   common_content = list(db.common.find({'user_id' : user_info['user_id']}))
+   return render_template('yourprofile.html' , common_content = common_content , user_name = user_info['name'])
 
 if __name__ == '__main__':
    app.secret_key = "123"
