@@ -72,7 +72,8 @@ function signup() {
     password.length == 0 ||
     password_re.length == 0
   ) {
-    alert(1);
+    alert("입력란을 모두 입력하세요");
+    return
   }
 
   $.ajax({

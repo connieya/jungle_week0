@@ -17,9 +17,10 @@ SECRET_KEY = 'threeeeee'
 
 @app.route('/')
 def main():
+   # if session['sort'] == 1:
+   #    user_list = list(db.mystar.find({}, {'_id': False}).sort('time', -1))
 
    token_receive = request.cookies.get('token')
-   
    user_list = list(db.user.find({}))
    try:
       payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
@@ -27,7 +28,6 @@ def main():
       if "user_id" in session :
          user_id = session['user_id']
          return render_template('main.html', session_id = user_id , login = True , users = user_list)
-
    except jwt.ExpiredSignatureError:
       print("except")
       return render_template('main.html' , login = False , users = user_list)
@@ -50,7 +50,7 @@ def same_id():
 @app.route('/signUp',methods = ['POST'])
 def add_user():
    before_password = request.form['user_pw']
-   after_password = jwt.encode({'password' : before_password} , 'abcde' , algorithm = 'HS256')
+   after_password = hashlib.sha256(before_password.encode('utf-8')).hexdigest()
    user_name  = request.form['user_name']
    user_id = request.form['user_id']
    d = dt.datetime.now()
@@ -71,12 +71,12 @@ def login() :
    login_id = request.form['login_id']
    login_pw = request.form['login_pw']
    login_after_pw = hashlib.sha256(login_pw.encode('utf-8')).hexdigest()
-   user = db.user.find_one({'user_id' : login_id})
+   user = db.user.find_one({'user_id' : login_id, 'password': login_after_pw})
    print(user)
    if user :
       payload = {
          'id': login_id,
-         'exp': dt.datetime.utcnow() + dt.timedelta(seconds=60)
+         'exp': dt.datetime.utcnow() + dt.timedelta(seconds=8600)
       }
       token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
       # session['user_name'] = user['user_id']
@@ -141,6 +141,7 @@ def clickSympathy() :
 @app.route('/orderbytime' , methods=['GET'])
 def orderbytime():
    session['sort'] = 1
+   # stars = list(db.mystar.find({}, {'_id': False}).sort('time', -1))
    return jsonify({'result': 'success'})
 
 @app.route('/callSympathy', methods=['POST'])
