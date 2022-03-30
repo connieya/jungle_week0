@@ -12,10 +12,6 @@ db = client.week1
 
 SECRET_KEY = 'threeeeee'
 
-# @app.route('/home')
-# def home():
-#    return render_template('main.html')
-
 key = 1
 
 @app.route('/')
@@ -142,7 +138,6 @@ def clickSympathy() :
    sympathy_id = request.form['sympathy_id'];
    comment = request.form['info'];
    pk = request.form['pk'];
-   # print("1111",len(comment))
    user = db.user.find_one({'user_id' : user_id},{'_id':False})
    sympathy_value = db.sympathy.find_one({'id' :pk , 'sympathy_id' : sympathy_id })
    if sympathy_value == None :
@@ -150,7 +145,6 @@ def clickSympathy() :
       db.user.update_one({'user_id' : user_id},{'$set' : {'sympathyCount' :user['sympathyCount']+1}})
       return jsonify({'result' : 'success'})
    else :
-      print("이미 공감 누름")
       db.sympathy.delete_one({'id' : pk , 'sympathy_id' : sympathy_id} )
       db.user.update_one({'user_id' : user_id},{'$set' : {'sympathyCount' :user['sympathyCount']-1}})
       return jsonify({'result' : 'fail'})
