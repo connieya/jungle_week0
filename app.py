@@ -3,6 +3,7 @@ from pymongo import MongoClient
 from bson import ObjectId
 import jwt, json, hashlib
 import datetime as dt
+import gridfs
 
 app = Flask(__name__)
 client = MongoClient('localhost',27017)
@@ -34,6 +35,9 @@ def main():
       print("except")
       return render_template('main.html' , login = False , users = user_list)
 
+
+
+#아이디 중복확인
 @app.route('/idOverlap', methods=['POST'])
 def same_id():
    if list(db.user.find({'user_id' :request.form['log_id']})):
@@ -147,6 +151,24 @@ def callSympathy() :
    print("sympathy !!!" , sympathy_people)
    return jsonify({'data' : sympathy_people})
 
+@app.route("/upload", methods=['POST'])
+def upload():
+	## file upload ##
+    img = request.files['image']
+    
+    ## GridFs를 통해 파일을 분할하여 DB에 저장하게 된다
+    fs = gridfs.GridFS(db)
+    fs.put(img, filename = 'name')
+    
+    ## file find ##
+    data = client.grid_file.fs.files.find_one({'filename':'name'})
+    
+    ## file download ##
+    my_id = data['_id']
+    outputdata = fs.get(my_id).read()
+    output = open('./images/'+'back.jpeg', 'wb')
+    output.write(outputdata)
+    return jsonify({'msg':'저장에 성공했습니다.'})
 
 
 if __name__ == '__main__':
