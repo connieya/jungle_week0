@@ -12,10 +12,41 @@
       href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
     />
     <link rel="stylesheet" href="/static/styleYour.css" />
+
+       <!-- JS -->
+    <script defer src="/static/main.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      function clickSympathy(common_id) {
+        info = $(`.${common_id}`).text();
+        user_id = $(`#${common_id}`).text();
+        person = $('#hidden_id').text();
+        console.log(info , user_id , person)
+         $.ajax({
+          type: "POST",
+          url: "/sympathy",
+          data: { user_id: user_id, person: person , info : info , pk : common_id},
+          success: function (response) {
+            if (response["result"] == "success") {
+               window.location.reload();
+            }
+          },
+        });
+
+      }
+    </script>
   </head>
   <body>
     <header>
-      <button class="button" onclick="window.location.href='{{ url_for( 'main' ) }}';" >돌아가기</button>
+      <button
+        class="button"
+        onclick="window.location.href='{{ url_for( 'main' ) }}';"
+      >
+        돌아가기
+      </button>
     </header>
     <div class="wrap">
       <div class="card">
@@ -27,8 +58,9 @@
             />
           </figure>
         </div>
+         <div id="hidden_id" style="display: none;">{{session['user_name']}}</div>
         <div class="card__container">
-          <div class="card-name">{{user_name}}</div>
+          <div class="card-name" >{{user_name}}</div>
           <div class="card-content">
             <div class="card__header">
               <div class="card__text">
@@ -39,8 +71,15 @@
             <div class="list">
               {% for common in common_content %}
               <div class="list__content">
-                <div class="content__comment">{{common.info}}</div>
-                <button class="button">공감</button>
+                <div id="{{common._id}}" style="display: none;">{{user_id}}</div>
+                <div class="{{common._id}}">{{common.info}}</div>
+                <p>양현석 ,신승준 , 박건희</p>
+                <button
+                  class="button"
+                  onclick="clickSympathy('{{common._id }}')"
+                >
+                  공감
+                </button>
               </div>
             </div>
             {% endfor %}

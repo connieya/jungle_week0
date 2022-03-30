@@ -24,10 +24,11 @@
     <script>
       function registerInfo(user_id) {
       let info = $('#my_info').val();
+      let name = $('#user_info_name').text();
        $.ajax({
          type : "POST",
          url : '/registerInfo',
-         data : {user_id : user_id ,my_info : info },
+         data : {user_id : user_id ,my_info : info , name : name },
          success : function(response){
            if (response["result"] == "success") {
             window.location.reload();
@@ -68,7 +69,7 @@
         </div>
       
         <div class="card__container">
-          <div class="card-name">{{user_info.name}}</div>
+          <div class="card-name" id="user_info_name">{{user_info.name}}</div>
           <div class="card-content">
             <div class="card__header">
               <div class="card__text">
