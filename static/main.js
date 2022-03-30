@@ -15,13 +15,11 @@ function logout() {
 function login() {
   let login_id = $("#login__id").val();
   let login_pw = $("#login__password").val();
-  console.log(login_id, login_pw);
   $.ajax({
     type: "POST",
     url: "/login",
     data: { login_id: login_id, login_pw: login_pw },
     success: function (response) {
-      console.log("~~~~~~~##".response);
       if (response["result"] == "success") {
         alert("로그인 성공!");
         window.location.href = "/";
@@ -41,7 +39,6 @@ function signup() {
     alert("비밀번호가 일치 하지 않습니다. ");
     return;
   }
-  console.log(id, name, password, password_re);
 
   $.ajax({
     type: "POST",
@@ -67,7 +64,6 @@ function myprofile(user_id){
      data: { user_id: user_id},
      success: function (response) {
        console.log("response =>" , response)
-       window.location.href = '/myprofile'
      },
    });
 }

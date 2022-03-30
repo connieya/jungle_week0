@@ -171,24 +171,46 @@ def logout():
    # session['logged_in'] = False
    return jsonify({'result' : 'success'})
 
-@app.route('/myprofile' , methods = ['GET' , 'POST'])
+@app.route('/profilepage/<user_id>')
+def profilePage(user_id):
+   user_info = db.user.find_one({'user_id' : user_id })
+   my_info = list(db.info.find({'user_id' : user_info['user_id']}))
+   return render_template('myprofile.html' ,user_info = user_info , my_info = my_info)
+
+
+@app.route('/registerInfo' , methods = ['POST'])
 def myprofile():
-   user_id =request.args.get('user_id')
-   print("@@#!!@#!@#@!" ,user_id)
-   common_content = list(db.common.find({'user_id' : user_id}))
-   print("sdadasd",common_content)
-   return render_template('myprofile.html' , user_id = user_id)   
+   user_id  = request.form['user_id'];
+   my_info  = request.form['my_info'];
+   name  = request.form['name'];
+   db.info.insert_one({'user_id' : user_id ,'name' : name , 'info' : my_info})
+   return jsonify({'result' : 'success'})
+
+    
 
 
 @app.route('/yourProfile/<user_id>')
 def you(user_id):
    user_info = db.user.find_one({'user_id' : user_id })
-   print("user_info" ,type(user_info))
-   print("user_info @@@@" ,user_info['user_id'])
-   print("user_info @@@@" ,user_info['name'])
-   
-   common_content = list(db.common.find({'user_id' : user_info['user_id']}))
-   return render_template('yourprofile.html' , common_content = common_content , user_name = user_info['name'])
+   common_content = list(db.info.find({'user_id' : user_info['user_id']}))
+   return render_template('yourprofile.html' , common_content = common_content , user_name = user_info['name'] , user_id = user_info['user_id'])
+
+
+@app.route('/deleteInfo', methods=['POST'])
+def deleteInfo():
+   pk = request.form['pk'];
+   db.info.delete_one({'_id': ObjectId(pk)})
+   return jsonify({'result' : 'success'})
+
+@app.route('/sympathy' ,  methods=['POST'])
+def clickSympathy() :
+   user_id = request.form['user_id'];
+   person = request.form['person'];
+   info = request.form['info'];
+   pk = request.form['pk'];
+   db.sympathy.insert_one({'id' : pk , 'user_id' : user_id , 'info' : info , 'person' : person});
+   return jsonify({'result' : 'success'})
+
 
 if __name__ == '__main__':
    app.secret_key = "123"

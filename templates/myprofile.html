@@ -12,10 +12,50 @@
       href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
     />
     <link rel="stylesheet" href="/static/styleMy.css" />
+
+      <!-- JS -->
+    <script defer src="/static/main.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.min.js"
+      crossorigin="anonymous"
+    ></script>
+
+
+    <script>
+      function registerInfo(user_id) {
+      let info = $('#my_info').val();
+      let name = $('#user_info_name').text();
+       $.ajax({
+         type : "POST",
+         url : '/registerInfo',
+         data : {user_id : user_id ,my_info : info , name : name },
+         success : function(response){
+           if (response["result"] == "success") {
+            window.location.reload();
+      }
+
+         },
+       });
+      }
+
+      function deleteInfo(pk) {
+       $.ajax({
+         type : "POST",
+         url : '/deleteInfo',
+         data : {pk : pk },
+         success : function(response){
+           if (response["result"] == "success") {
+            window.location.reload();
+      }
+
+         },
+       });
+      }
+    </script>
   </head>
   <body>
     <header>
-      <button class="button">돌아가기</button>
+      <button class="button" onclick="window.location.href='{{ url_for( 'main' ) }}';" >돌아가기</button>
     </header>
     <div class="wrap">
       <div class="card">
@@ -27,9 +67,9 @@
             />
           </figure>
         </div>
-
+      
         <div class="card__container">
-          <div class="card-name">{{user_id}}</div>
+          <div class="card-name" id="user_info_name">{{user_info.name}}</div>
           <div class="card-content">
             <div class="card__header">
               <div class="card__text">
@@ -42,15 +82,17 @@
               </footer>
             </div>
             <div class="list">
+                {% for info in my_info %}
               <div class="list__content">
-                <div class="content__comment">여행을 좋아해요.</div>
-                <button class="button">삭제</button>
+                <div class="content__comment">{{info.info}}</div>
+                <button class="button"  onclick="deleteInfo('{{info._id}}')" > 삭제 </button>
               </div>
+              {% endfor %}
             </div>
 
             <div class="card__input">
-              <input type="text" placeholder="나를 소개 해보아요." />
-              <button class="button">등록</button>
+              <input id = "my_info" type="text" placeholder="나를 소개 해보아요." />
+              <button class="button" onclick="registerInfo('{{user_info.user_id}}')">등록</button>
             </div>
           </div>
         </div>
