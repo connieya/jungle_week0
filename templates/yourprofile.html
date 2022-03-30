@@ -9,7 +9,6 @@
     <script>
       let total = 0;
       $(document).ready(function () {
-        
         // showSympathyPeople();
       });
 
@@ -37,12 +36,12 @@
               console.log(person);
               $(`#${common_pk}_2`).append(person + " ");
             }
-            total += datas.length
-            $('.common__count').html(total) 
+            total += datas.length;
+            $(".common__count").html(total);
           },
         });
       }
-   
+
       function clickSympathy(common_id) {
         info = $(`.${common_id}`).text();
         user_id = $(`#${common_id}`).text();
@@ -81,7 +80,7 @@
         <i class="fa-brands fa-creative-commons-nd"></i>
       </div>
       <div class="header__title">
-        <h1 class="title is-2 title--main" style="color: white;">유대의 민족</h1>
+        <h1 class="title is-2 title--main" style="color: white">유대의 민족</h1>
       </div>
       <button
         class="button"
@@ -94,9 +93,9 @@
     <div class="wrap">
       <div class="card">
         <div class="card-image">
-          <figure class="image is-4by3">
+          <figure class="image is-1by1">
             <img
-              src="https://bulma.io/images/placeholders/1280x960.png"
+              src="../static/images/{{user_name}}.png"
               alt="Placeholder image"
             />
           </figure>
@@ -113,8 +112,8 @@
               </div>
             </div>
             <div class="list">
-              {% for common in common_content %}
               <div class="list__content">
+                {% for common in common_content %}
                 <div id="common_hidden" style="display: none">
                   {{common._id}}
                 </div>
@@ -122,16 +121,25 @@
                 <script type="text/javascript">
                   callSympathyData("{{common._id}}");
                 </script>
+                <div class="sympathylist--container">
+                <div class="sympathylist">
                 <div class="{{common._id}}">{{common.info}}</div>
-                <p id="{{common._id}}_2"></p>
+
+                
                 <button
                   class="button"
-                  onclick="clickSympathy(`{{common._id}}`)">
+                  onclick="clickSympathy(`{{common._id}}`)"
+
+                  style="border-radius: 100%; height: 45px; width: 45px;"
+                >
                   공감
                 </button>
               </div>
+              <p class='sympathyfriend'id="{{common._id}}_2"></p>
             </div>
-            {% endfor %}
+                {% endfor %}
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -47,6 +47,7 @@ header {
   justify-content: center;
   align-items: center;
   margin: auto;
+  width: 450px;
 }
 
 .card {
@@ -73,8 +74,39 @@ header {
 .list__content {
   margin: 10px;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
+}
+
+.sympathylist {
+  margin: 5px 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sympathylist--container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  border: 1px solid rgb(199, 194, 194);
+  border-radius: 10px;
+  margin-bottom: 10px;
+  padding: 5px;
+}
+
+.sympathyfriend {
+  text-align: center;
+  width: 250px;
+  max-width: 250px;
+  position: relative;
+  color: white;
+  background-color: rgb(95, 156, 95);
+  border: 2px solid gray;
+  border-radius: 5px;
 }
 
 .card__input {
