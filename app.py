@@ -3,6 +3,7 @@ from pymongo import MongoClient
 from bson import ObjectId
 import jwt, json, hashlib
 import datetime as dt
+import gridfs
 
 app = Flask(__name__)
 client = MongoClient('localhost',27017)
@@ -17,34 +18,35 @@ SECRET_KEY = 'threeeeee'
 @app.route('/')
 def main():
 
-   token_receive = request.cookies.get('token')
+   return render_template('upload.html')
+   # token_receive = request.cookies.get('token')
    
-   user_list = list(db.user.find({}))
-   try:
-      payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-      print("try")
-      if "user_id" in session :
-         user_id = session['user_id']
-         return render_template('main.html', session_id = user_id , login = True , users = user_list)
+   # user_list = list(db.user.find({}))
+   # try:
+   #    payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+   #    print("try")
+   #    if "user_id" in session :
+   #       user_id = session['user_id']
+   #       return render_template('main.html', session_id = user_id , login = True , users = user_list)
 
-   except jwt.ExpiredSignatureError:
-      print("except")
-      return render_template('main.html' , login = False , users = user_list)
-   except jwt.exceptions.DecodeError:
-      print("except")
-      return render_template('main.html' , login = False , users = user_list)
+   # except jwt.ExpiredSignatureError:
+   #    print("except")
+   #    return render_template('main.html' , login = False , users = user_list)
+   # except jwt.exceptions.DecodeError:
+   #    print("except")
+   #    return render_template('main.html' , login = False , users = user_list)
 
 
 #아이디 중복확인
-@app.route('/sameid', methods=['POST'])
+@app.route('/idOverlap', methods=['POST'])
 def same_id():
 
-   print(list(db.user.find({'user_id' :request.form['log_id']})))
    if list(db.user.find({'user_id' :request.form['log_id']})):
       print("aaaaaa")
       return jsonify({'result': 'overlap'})
    else:
       return jsonify({'result': 'success'})
+
 
 @app.route('/signUp',methods = ['POST'])
 def add_user():
@@ -146,6 +148,24 @@ def callSympathy() :
    print("sympathy !!!" , sympathy_people)
    return jsonify({'data' : sympathy_people})
 
+@app.route("/upload", methods=['POST'])
+def upload():
+	## file upload ##
+    img = request.files['image']
+    
+    ## GridFs를 통해 파일을 분할하여 DB에 저장하게 된다
+    fs = gridfs.GridFS(db)
+    fs.put(img, filename = 'name')
+    
+    ## file find ##
+    data = client.grid_file.fs.files.find_one({'filename':'name'})
+    
+    ## file download ##
+    my_id = data['_id']
+    outputdata = fs.get(my_id).read()
+    output = open('./images/'+'back.jpeg', 'wb')
+    output.write(outputdata)
+    return jsonify({'msg':'저장에 성공했습니다.'})
 
 
 if __name__ == '__main__':
