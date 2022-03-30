@@ -18,10 +18,7 @@ SECRET_KEY = 'threeeeee'
 def main():
 
    token_receive = request.cookies.get('token')
-   # if session['sort'] == 1:
-   #    user_list = list(db.user.find({}, {'_id': False}).sort('time', -1))
-   # else:
-   #    user_list = list(db.user.find({}))
+   
    user_list = list(db.user.find({}))
    try:
       payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
