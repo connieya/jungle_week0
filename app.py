@@ -81,6 +81,9 @@ def you(user_id):
 @app.route('/deleteInfo', methods=['POST'])
 def deleteInfo():
    pk = request.form['pk'];
+   print("pk~~~" ,pk)
+   print("pk~~~~~2" , ObjectId(pk))
+   db.sympathy.delete_many({'id' : pk})
    db.info.delete_one({'_id': ObjectId(pk)})
    return jsonify({'result' : 'success'})
 
