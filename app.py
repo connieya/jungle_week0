@@ -71,8 +71,6 @@ def myprofile():
    return jsonify({'result' : 'success'})
 
     
-
-
 @app.route('/yourProfile/<user_id>')
 def you(user_id):
    user_info = db.user.find_one({'user_id' : user_id })
@@ -94,6 +92,14 @@ def clickSympathy() :
    pk = request.form['pk'];
    db.sympathy.insert_one({'id' : pk , 'user_id' : user_id , 'info' : info , 'person' : person});
    return jsonify({'result' : 'success'})
+
+@app.route('/callSympathy', methods=['POST'])
+def callSympathy() :
+   info_pk = request.form['info_pk']
+   print("ddsda", info_pk);
+   sympathy_people = list(db.sympathy.find({'id' : info_pk },{'_id':False}))
+   print("sympathy !!!" , sympathy_people)
+   return jsonify({'data' : sympathy_people})
 
 
 if __name__ == '__main__':

@@ -13,33 +13,68 @@
     />
     <link rel="stylesheet" href="/static/styleYour.css" />
 
-       <!-- JS -->
+    <!-- JS -->
     <script defer src="/static/main.js"></script>
     <script
       src="https://code.jquery.com/jquery-3.5.1.min.js"
       crossorigin="anonymous"
     ></script>
     <script>
-$(document).ready(function () {
-               
-            });
+      $(document).ready(function () {
+        // showSympathyPeople();
+      });
+      
+      // function showSympathyPeople() {
+      //  common_pk = $('#common_hidden').text();
+      //  console.log("pk~~~",common_pk)
+      //   $.ajax({
+      //     type : "GET",
+      //     url : "/showSympathy",
+      //     data : {},
+
+      
+      //   })
+      //   $("#sympathy_data").append();
+
+      // }
+      function callSympathyData(common_pk) {
+        $.ajax({
+          type : "POST",
+          url : "/callSympathy",
+          data : {info_pk : common_pk},
+          success : function(response) {
+            datas = response["data"]
+            for (let i=0; i<datas.length; i++){
+              person = datas[i]['person']
+              console.log(person)
+              $(`#${common_pk}_2`).append(person+" ")
+            }
+
+          }
+        })
+        
+      }
 
       function clickSympathy(common_id) {
         info = $(`.${common_id}`).text();
         user_id = $(`#${common_id}`).text();
-        person = $('#hidden_id').text();
-        console.log(info , user_id , person)
-         $.ajax({
+        person = $("#hidden_id").text();
+        session_id = $("#hidden_id2").text();
+        if (user_id == session_id) {
+          alert("본인 글에는 공감 할 수 없습니다. 미안~");
+          return;
+        }
+        console.log(info, user_id, person);
+        $.ajax({
           type: "POST",
           url: "/sympathy",
-          data: { user_id: user_id, person: person , info : info , pk : common_id},
+          data: { user_id: user_id, person: person, info: info, pk: common_id },
           success: function (response) {
             if (response["result"] == "success") {
-               window.location.reload();
+              window.location.reload();
             }
           },
         });
-
       }
     </script>
   </head>
@@ -62,9 +97,10 @@ $(document).ready(function () {
             />
           </figure>
         </div>
-         <div id="hidden_id" style="display: none;">{{session['user_name']}}</div>
+        <div id="hidden_id" style="display: none">{{session['user_name']}}</div>
+        <div id="hidden_id2" style="display: none">{{session['user_id']}}</div>
         <div class="card__container">
-          <div class="card-name" >{{user_name}}</div>
+          <div class="card-name">{{user_name}}</div>
           <div class="card-content">
             <div class="card__header">
               <div class="card__text">
@@ -75,9 +111,10 @@ $(document).ready(function () {
             <div class="list">
               {% for common in common_content %}
               <div class="list__content">
-                <div id="{{common._id}}" style="display: none;">{{user_id}}</div>
-                <div class="{{common._id}}">{{common.info}}</div>
-                <p>양현석 ,신승준 , 박건희</p>
+                <div id="common_hidden" style="display: none">{{common._id}}</div>
+                <div id="{{common._id}}" style="display: none">{{user_id}}</div>
+                <div class="{{common._id}}" onclick="callSympathyData('{{common._id}}')">{{common.info}}</div>
+                <p id="{{common._id}}_2"></p>
                 <button
                   class="button"
                   onclick="clickSympathy('{{common._id }}')"
