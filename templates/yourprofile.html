@@ -1,26 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>yourprofile</title>
+    {% include 'head.html' %}
 
     <!-- CSS -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
-    />
     <link rel="stylesheet" href="/static/styleYour.css" />
 
-    <!-- JS -->
-    <script defer src="/static/main.js"></script>
-    <script
-      src="https://code.jquery.com/jquery-3.5.1.min.js"
-      crossorigin="anonymous"
-    ></script>
     <script>
-      // let total = 0;
+      let total = 0;
+      $(document).ready(function () {
+        
+        // showSympathyPeople();
+      });
+
+      // function showSympathyPeople() {
+      //  common_pk = $('#common_hidden').text();
+      //  console.log("pk~~~",common_pk)
+      //   $.ajax({
+      //     type : "GET",
+      //     url : "/showSympathy",
+      //     data : {},
+
+      //   })
+      //   $("#sympathy_data").append();
+
+      // }
       function callSympathyData(common_pk) {
         $.ajax({
           type: "POST",
@@ -33,8 +37,8 @@
               console.log(person);
               $(`#${common_pk}_2`).append(person + " ");
             }
-            // total += datas.length
-            // $('.common__count').html(total) 
+            total += datas.length
+            $('.common__count').html(total) 
           },
         });
       }
@@ -73,6 +77,12 @@
   </head>
   <body>
     <header>
+      <div class="header__logo">
+        <i class="fa-brands fa-creative-commons-nd"></i>
+      </div>
+      <div class="header__title">
+        <h1 class="title is-2 title--main" style="color: white;">유대의 민족</h1>
+      </div>
       <button
         class="button"
         onclick="window.location.href='{{ url_for( 'main' ) }}';"
@@ -99,7 +109,7 @@
             <div class="card__header">
               <div class="card__text">
                 <span class="common__text">공감 : </span>
-                <span class="common__count">{{count}}</span>
+                <span class="common__count"></span>
               </div>
             </div>
             <div class="list">

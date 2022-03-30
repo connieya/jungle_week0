@@ -28,9 +28,18 @@ i {
 
 /* myprofile.html */
 header {
+  position: fixed;
+  width: 100%;
+  background: url('/static/images/background.png');
   display: flex;
-  justify-content: center;
-  margin: 20px;
+  justify-content: space-around;
+  align-items: center;
+  padding: 20px;
+  z-index: 1;
+}
+
+.header__logo {
+  color: white;
 }
 
 .wrap {
@@ -40,6 +49,7 @@ header {
 }
 
 .card {
+  margin-top: 100px;
   width: 600px;
 }
 
@@ -49,17 +59,35 @@ header {
 }
 
 .card-name {
+  margin-top: 20px;
   text-align: center;
+}
+
+.card-content {
+  padding-top: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items:stretch;
 }
 
 .card__header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 10px;
+}
+
+.card-footer {
+  border: 1px solid rgb(173, 171, 171);
+  border-radius: 10px;
+}
+
+.card-footer-item {
+  color: black;
 }
 
 .list__content {
-  margin: 10px;
+  margin-top: 5px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -70,4 +98,8 @@ header {
   justify-content: space-between;
   align-items: center;
   margin: 50px 0 20px 0;
+}
+
+#my_info {
+margin: 5px;
 }

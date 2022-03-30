@@ -28,9 +28,18 @@ i {
 
 /* yourprofile.html */
 header {
+  position: fixed;
+  width: 100%;
+  background: url('/static/images/background.png');
   display: flex;
-  justify-content: center;
-  margin: 20px;
+  justify-content: space-around;
+  align-items: center;
+  padding: 20px;
+  z-index: 1;
+}
+
+.header__logo {
+  color: white;
 }
 
 .wrap {
@@ -41,6 +50,7 @@ header {
 }
 
 .card {
+  margin-top: 100px;
   width: 600px;
 }
 
@@ -50,6 +60,7 @@ header {
 }
 
 .card-name {
+  margin-top: 20px;
     text-align: center;
 }
 

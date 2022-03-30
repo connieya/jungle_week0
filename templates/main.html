@@ -5,19 +5,6 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="/static/style.css" />
-    <script>
-      
-function callSympathyCount(user_id){
-  $.ajax({
-    type: "POST",
-    url: "/callSympathyCount",
-    data: { user_id: user_id },
-    success: function (response) {
-      $(`#${user_id}`).append(response.data.length)
-    },
-  });
-}
-    </script>
   </head>
   <body>
     <!-- Header -->
@@ -26,28 +13,30 @@ function callSympathyCount(user_id){
         <i class="fa-brands fa-creative-commons-nd"></i>
       </div>
       <div class="header__title">
-        <h1 class="title is-2">유대의 민족</h1>
+        <h1 class="title is-2 title--main">유대의 민족</h1>
       </div>
-      {% if login == True %} {{session['user_name']}} <h1>님 반가워요!!</h1>
-      <div class="header__auth">
-        <!-- <button class="button is-light">로그인</button> -->
-        <button class="button is-light" onclick="logout()">로그아웃</button>
-        <!-- <button class="button is-info">회원가입</button> -->
-        <!-- <a class="button is-info" onclick="myprofile('{{session_id}}')">내 프로필 </button> -->
-        <a class="button is-info" href={{ url_for('myProfile',  user_id = session_id ) }} )">내 프로필 </a>
+      {% if login == True %}
+      <div class="header__auth--logout">
+        <div class="auth__button">
+          <button class="button is-light" onclick="logout()">로그아웃</button>
+          <a class="button is-success" href={{ url_for('myProfile',  user_id = session_id ) }} )">내 프로필 </a>
+        </div>
+        <h3 class="title is-6 welcome">
+          {{session['user_name']}} 님 반가워요!
+        </h3>
       </div>
       {% else %}
       <div class="header__auth">
-        <!-- <button class="button is-light">로그인</button> -->
+
         <button
           class="button is-light js-modal-trigger1"
           data-target="modal-js-example--login"
         >
           로그인
         </button>
-        <!-- <button class="button is-info">회원가입</button> -->
+
         <button
-          class="button is-info js-modal-trigger2"
+          class="button is-success js-modal-trigger2"
           data-target="modal-js-example--signup"
         >
           회원가입
@@ -71,19 +60,15 @@ function callSympathyCount(user_id){
 
             <div class="card">
               <div class="card-image">
-                <figure class="image is-4by3">
+                <figure class="image is-4by4">
                   <img
-                    src="https://bulma.io/images/placeholders/1280x960.png"
+                    src="../static/images/{{user.name}}.png"
                     alt="Placeholder image"
                   />
                 </figure>
               </div>
-              <script type="text/javascript">
-                callSympathyCount("{{user.user_id}}")
-              </script>
               <div class="card-content">
                 <a class="content__name" href={{ url_for('yourProfile',  user_id = user.user_id )}}>{{user.name}}</a>
-              <p id="{{user.user_id}}">공감 : </p>
               </div>
             </div>
             {% endfor %}
@@ -97,16 +82,10 @@ function callSympathyCount(user_id){
     <footer>
       <footer class="footer">
         <div class="content has-text-centered">
-          <p>
-            <strong>Bulma</strong> by
-            <a href="https://jgthms.com">Jeremy Thomas</a>. The source code is
-            licensed
-            <a href="http://opensource.org/licenses/mit-license.php">MIT</a>.
-            The website content is licensed
-            <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
-              >CC BY NC SA 4.0</a
-            >.
+          <p><a href="https://github.com/connieya/jungle_week0">Github 주소 : https://github.com/connieya/jungle_week0</a>
           </p>
+          <a target='_blank' href='https://github.com/connieya/jungle_week0'><i class="fa-brands fa-github"></i></a>
+          <h1 class="title is-4">SW 사관학교 정글 4기 B반</h1>
         </div>
       </footer>
     </footer>

@@ -44,11 +44,23 @@ header {
   background-color: white;
 }
 
+.header__auth--logout {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.welcome {
+  color: white;
+  margin-top: 10px;
+}
+
 .fa-brands {
   color: white;
 }
 
-.title {
+.title--main {
   position: relative;
   left: 80px;
   color: white;
@@ -92,6 +104,18 @@ span {
 }
 
 /* Footer */
+.footer {
+  width: 100%;
+  position: fixed;
+  bottom: 0px;
+  padding: 16px 24px;
+  position: static;
+}
+
+.fa-github {
+  color: black;
+  font-size: 60px;
+}
 
 /* Modal */
 .box {
