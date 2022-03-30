@@ -104,7 +104,9 @@ def registerInfo():
 def myProfile(user_id):
    user_info = db.user.find_one({'user_id' : user_id })
    my_info = list(db.info.find({'user_id' : user_info['user_id']}))
-   return render_template('myprofile.html' ,user_info = user_info , my_info = my_info)
+   sympathyList = list(db.sympathy.find({'user_id' : user_info['user_id']}))
+   print(len(sympathyList))
+   return render_template('myprofile.html' ,user_info = user_info , my_info = my_info , sympathyCnt = len(sympathyList))
 
 @app.route('/yourProfile/<user_id>')
 def yourProfile(user_id):
@@ -127,11 +129,13 @@ def clickSympathy() :
    sympathy_id = request.form['sympathy_id'];
    comment = request.form['info'];
    pk = request.form['pk'];
-   print("ddd",comment, user_id ,sympathy_person , sympathy_id ,pk)
-   print("1111",len(comment))
+   # print("1111",len(comment))
    sympathy_value = db.sympathy.find_one({'id' :pk , 'sympathy_id' : sympathy_id })
    if sympathy_value == None :
       db.sympathy.insert_one({'id' : pk , 'user_id' : user_id , 'info' : comment ,'sympathy_id' : sympathy_id , 'sympathy_person' : sympathy_person});
+      user = db.user.find_one({'user_id' : user_id},{'_id':False})
+      print("ddd",user['sympathyCount'])
+      db.user.update_one({'user_id' : user_id},{'$set' : {'sympathyCount' :user['sympathyCount']+1}})
       return jsonify({'result' : 'success'})
    else :
       print("이미 공감 누름")

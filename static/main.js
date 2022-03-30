@@ -1,5 +1,3 @@
-
-
 function logout() {
   // $.ajax({
   //   type: "GET",
