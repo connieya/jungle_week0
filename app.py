@@ -16,14 +16,23 @@ SECRET_KEY = 'threeeeee'
 
 @app.route('/')
 def main():
+
+   token_receive = request.cookies.get('token')
    user_list = list(db.user.find({}))
-   if "user_id" in session :
-      user_id = session['user_id']
-      return render_template('main.html', session_id = user_id , login = True , users = user_list)
+   try:
+      payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+      print("try")
+      if "user_id" in session :
+         user_id = session['user_id']
+         return render_template('main.html', session_id = user_id , login = True , users = user_list)
 
-   return render_template('main.html' , login = False , users = user_list)
+   except jwt.ExpiredSignatureError:
+      print("except")
+      return render_template('main.html' , login = False , users = user_list)
+   except jwt.exceptions.DecodeError:
+      print("except")
+      return render_template('main.html' , login = False , users = user_list)
 
-   # token_receive = request.cookies.get('token')
    # id_receive = request.cookies.get('data')
    # # data = request.cookies.get('data')
 
@@ -62,10 +71,12 @@ def login() :
    if user :
       payload = {
          'id': login_id,
-         'exp': dt.datetime.utcnow() + dt.timedelta(seconds=3000)
+         'exp': dt.datetime.utcnow() + dt.timedelta(seconds=60)
       }
       token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
       # session['user_name'] = user['user_id']
+      session['logged_in'] = True
+      session['user_id'] = login_id
       session['user_name'] = user['name']
 
       return jsonify({'result': 'success', 'token': token})
