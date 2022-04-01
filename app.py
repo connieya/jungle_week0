@@ -79,7 +79,7 @@ def login() :
       }
       token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
       # session['user_name'] = user['user_id']
-      session['logged_in'] = True
+      session['logged_in'] = 1
       session['user_id'] = login_id
       session['user_name'] = user['name']
 
@@ -91,10 +91,12 @@ def login() :
 
 @app.route('/logout' , methods =['GET'])
 def logout():
+   print("로그아웃 ??")
    session.pop('user_id')
-   session.pop['sort']
-   # session['logged_in'] = False
-   return jsonify({'result' : 'success'})
+   session.pop('logged_in')
+   # session.pop['sort']
+   session['logged_in'] = 2
+   return redirect(url_for('main'))
 
 @app.route('/registerInfo' , methods = ['POST'])
 def registerInfo():

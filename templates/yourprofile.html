@@ -43,10 +43,18 @@
       }
 
       function clickSympathy(common_id) {
+        sessionNumber = $("#hidden_id3").text();
+        console.log(sessionNumber)
+        if(sessionNumber != 1) {
+          alert("로그인 후 이용 가능합니다")
+          return;
+        }
         info = $(`.${common_id}`).text();
         user_id = $(`#${common_id}`).text();
         sympathy_person = $("#hidden_id").text(); // 공감 버튼을 누르는 사람 이름(로그인)
         session_id = $("#hidden_id2").text(); // 공감 버튼을 누르는 사람 아이디(로그인)
+        console.log("222222",session_id , sympathy_person)
+          
         if (user_id == session_id) {
           alert("본인 글에는 공감 할 수 없습니다. 미안~");
           return;
@@ -102,6 +110,7 @@
         </div>
         <div id="hidden_id" style="display: none">{{session['user_name']}}</div>
         <div id="hidden_id2" style="display: none">{{session['user_id']}}</div>
+        <div id="hidden_id3" style="display: none">{{session['logged_in']}}</div>
         <div class="card__container">
           <div class="card-name">{{user_name}}</div>
           <div class="card-content">
@@ -109,6 +118,7 @@
               <div class="card__text">
                 <span class="common__text">공감 : </span>
                 <span class="common__count">{{count}}</span>
+                 
               </div>
             </div>
             <div class="list">

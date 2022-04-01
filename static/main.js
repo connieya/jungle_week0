@@ -15,7 +15,7 @@ function logout() {
 
   $.removeCookie("token");
   alert("로그아웃 성공!");
-  window.location.href = "/";
+  window.location.href = "/logout";
 }
 
 

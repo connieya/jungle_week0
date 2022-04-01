@@ -7,15 +7,15 @@
     <link rel="stylesheet" href="/static/style.css" />
     <script>
       function callSympathyCount(user_id){
-  $.ajax({
-    type: "POST",
-    url: "/callSympathyCount",
-    data: { user_id: user_id },
-    success: function (response) {
-      $(`#${user_id}`).append(response.data.length)
-    },
-  });
-}
+         $.ajax({
+           type: "POST",
+           url: "/callSympathyCount",
+           data: { user_id: user_id },
+           success: function (response) {
+              $(`#${user_id}`).append(response.data.length)
+               },
+              })
+               ;}
     </script>
   </head>
   <body>
